@@ -1,0 +1,37 @@
+import {inject, Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {HttpClient, httpResource, HttpResourceRef} from "@angular/common/http";
+import {Task} from '../../models/task/Task';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TaskService {
+  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:8080/api/tasks';
+
+  getTasks(): HttpResourceRef<any> {
+    return httpResource<Task[]>(() => {
+      return {
+        url: this.apiUrl,
+        method: "GET"
+      };
+    });
+  }
+
+  getTask(id: number): Observable<Task> {
+    return this.http.get<Task>(`${this.apiUrl}/${id}`);
+  }
+
+  createTask(task: Partial<Task>): Observable<Task> {
+    return this.http.post<Task>(this.apiUrl, task);
+  }
+
+  updateTask(id: number, task: Partial<Task>): Observable<Task> {
+    return this.http.put<Task>(`${this.apiUrl}/${id}`, task);
+  }
+
+  deleteTask(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+}
