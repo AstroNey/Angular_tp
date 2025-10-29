@@ -19,8 +19,13 @@ export class TaskService {
     });
   }
 
-  getTask(id: number): Observable<Task> {
-    return this.http.get<Task>(`${this.apiUrl}/${id}`);
+  getTask(id: string): HttpResourceRef<any> {
+      return httpResource<Task[]>(() => {
+          return {
+              url: `${this.apiUrl}/${id}`,
+              method: "GET"
+          };
+      });
   }
 
   createTask(task: Partial<Task>): Observable<Task> {

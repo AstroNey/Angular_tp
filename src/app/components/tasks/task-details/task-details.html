@@ -1,1 +1,41 @@
-<p>task-details works!</p>
+@if (taskRessource.hasValue()) {
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center p-5 border-b border-gray-200">
+                <h2 class="text-2xl font-light text-gray-800">
+                    Détails de la Tâche
+                </h2>
+                <button (click)="closeDetails()"
+                    class="text-gray-400 hover:text-gray-800 text-3xl transition-colors">
+                    &times; </button>
+            </div>
+            <div class="p-6 flex-grow overflow-y-auto space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider">Titre</label>
+                    <h3 class="text-2xl font-semibold text-gray-900">
+                        {{ taskRessource.value().title || 'Titre non défini' }}
+                    </h3>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider">Statut</label>
+                    <span [ngClass]="{
+                    'bg-yellow-100 text-yellow-800': taskRessource.value().status === 'TODO',
+                    'bg-blue-100 text-blue-800': taskRessource.value().status === 'IN_PROGRESS',
+                    'bg-green-100 text-green-800': taskRessource.value().status === 'DONE'
+                  }"
+                          class="text-sm font-medium uppercase px-3 py-1 rounded-full">
+              {{ taskRessource.value().status.replace('_', ' ') }}
+            </span>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider">Description</label>
+                    <p class="text-gray-700 text-base leading-relaxed whitespace-pre-wrap">
+                        {{ taskRessource.value().description || 'Aucune description fournie.' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+}

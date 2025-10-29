@@ -1,5 +1,6 @@
 @if (task()) {
-    <div class="flex flex-col justify-between bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    <div [routerLink]="['details', task().id]"
+        class="flex flex-col justify-between bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
         <div class="p-6">
             <h3 class="text-xl font-semibold text-gray-800 mb-2">
                 {{ task().title }}
