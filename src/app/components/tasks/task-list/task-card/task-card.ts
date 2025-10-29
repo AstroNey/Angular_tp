@@ -1,7 +1,8 @@
-import {Component, input} from '@angular/core';
+import {Component, inject, input, InputSignal} from '@angular/core';
 import {NgClass} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import { Task } from "../../../../models/task/Task";
+import { TaskService } from "../../../../services/task/task-service";
 
 @Component({
     selector: 'app-task-card',
@@ -14,5 +15,14 @@ import { Task } from "../../../../models/task/Task";
     styleUrl: './task-card.css',
 })
 export class TaskCard {
-    task = input.required<Task>();
+    task: InputSignal<Task> = input.required<Task>();
+    #TaskService = inject(TaskService);
+
+    deleteTask(): void {
+        this.#TaskService.deleteTask(this.task().id).subscribe({
+            next: () => {
+                // TODO update front list of tasks
+            }
+        });
+    }
 }

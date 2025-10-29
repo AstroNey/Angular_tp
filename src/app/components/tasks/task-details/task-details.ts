@@ -2,6 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {NgClass} from '@angular/common';
 import {TaskService} from '../../../services/task/task-service';
 import {ActivatedRoute, Router} from '@angular/router';
+import { HttpResourceRef } from "@angular/common/http";
 
 @Component({
     selector: 'app-task-details',
@@ -13,14 +14,14 @@ import {ActivatedRoute, Router} from '@angular/router';
     styleUrl: './task-details.css',
 })
 export class TaskDetails {
-    #taskService = inject(TaskService);
-    #route = inject(ActivatedRoute);
-    #router = inject(Router);
+    #taskService: TaskService = inject(TaskService);
+    #route: ActivatedRoute = inject(ActivatedRoute);
+    #router: Router = inject(Router);
 
-    readonly taskId = this.#route.snapshot.paramMap.get('id') as string;
-    readonly taskRessource = this.#taskService.getTask(this.taskId);
+    readonly taskId: string = this.#route.snapshot.paramMap.get('id') as string;
+    readonly taskRessource: HttpResourceRef<any> = this.#taskService.getTask(this.taskId);
 
-    protected closeDetails() {
+    protected closeDetails(): void {
         this.#router.navigate(['../../'], { relativeTo: this.#route });
     }
 }
