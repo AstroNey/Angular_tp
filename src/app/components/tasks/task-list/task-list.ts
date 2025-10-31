@@ -3,6 +3,7 @@ import {TaskService} from '../../../services/task/task-service';
 import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
 import { TaskCard } from "./task-card/task-card";
 import { TaskDetails } from "../task-details/task-details";
+import {TaskStore} from '../../../stores/TaskStore';
 
 @Component({
     selector: 'app-task-list-component',
@@ -16,11 +17,10 @@ import { TaskDetails } from "../task-details/task-details";
     styleUrl: './task-list.css',
 })
 export class TaskList {
-    #taskService = inject(TaskService);
     #route = inject(ActivatedRoute);
     #router: Router = inject(Router);
+    taskStore = inject(TaskStore);
 
-    readonly tasksRessource = this.#taskService.getTasks();
     readonly taskId = this.#route.snapshot.paramMap.get('id') as string;
 
     public createTask(): void {

@@ -1,9 +1,10 @@
-import { Component, computed, effect, inject, linkedSignal, signal, WritableSignal } from '@angular/core';
-import { Task } from "../../../models/task/Task";
-import {Field, form, submit } from "@angular/forms/signals";
-import { TaskService } from "../../../services/task/task-service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { lastValueFrom } from "rxjs/internal/lastValueFrom";
+import {Component, inject, linkedSignal, WritableSignal} from '@angular/core';
+import {Task} from "../../../models/task/Task";
+import {Field, FieldState, form, maxLength, minLength, pattern, required, submit} from "@angular/forms/signals";
+import {TaskService} from "../../../services/task/task-service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {lastValueFrom} from "rxjs/internal/lastValueFrom";
+import {HttpResourceRef} from '@angular/common/http';
 
 @Component({
     selector: 'app-task-update',
@@ -18,28 +19,43 @@ export class TaskForm {
     #router: Router = inject(Router);
 
     readonly taskId = this.#route.snapshot.paramMap.get('id') as string;
-    readonly taskRessource = this.#taskService.getTask(this.taskId);
+    readonly taskRessource: HttpResourceRef<any> | undefined = this.#taskService.getTask(this.taskId);
 
     taskModel: WritableSignal<Task> = linkedSignal(() => {
-        return this.taskRessource.hasValue() ? this.taskRessource.value() : {id: -1, title: "", description: "", status: "TODO"};
+        return this.taskRessource !== undefined ? this.taskRessource.value() : {id: -1, title: "", description: "", status: "TODO"};
     })
-    taskForm = form(this.taskModel);
+
+    protected readonly taskForm = form(this.taskModel, (path) => {
+        required(path.title, { message: "Title is required." });
+        minLength(path.title, 3, { message: "Title must be at least 3 characters long."});
+        maxLength(path.title, 20, { message: "Title must be at least 3 characters long."});
+
+        maxLength(path.description, 250, { message: "Description cannot exceed 250 characters."});
+
+        required(path.status, { message: "Status is required." });
+        pattern(path.status, /^(TODO|IN_PROGRESS|DONE)$/, { message: "Status must be one of: TODO, IN_PROGRESS, DONE" });
+    });
+
+    protected showErrors(field: FieldState<string,  string>): boolean {
+        return field.touched() && field.errors().length > 0;
+    }
 
     protected onSubmit(event: Event) {
         try {
-            submit(this.taskForm, async () => {
+            submit(this.taskForm, async (form) => {
                 let responsedTask: Task;
                 if (this.taskId) {
                     responsedTask = await lastValueFrom(
-                        this.#taskService.updateTask(this.taskModel())
+                        this.#taskService.updateTask(form().value())
                     );
                 }
                 else {
                     responsedTask = await lastValueFrom(
-                        this.#taskService.createTask(this.taskModel())
+                        this.#taskService.createTask(form().value())
                     );
                 }
                 this.taskModel.set(responsedTask);
+                event.preventDefault();
                 this.#router.navigate(['../../'], { relativeTo: this.#route });
             })
             event.preventDefault();
@@ -48,3 +64,4 @@ export class TaskForm {
         }
     }
 }
+

@@ -1,6 +1,8 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-    @for (task of tasksRessource.value(); track task) {
-        <app-task-card [task]="task"></app-task-card>
+    @if (taskStore.tasks().length > 0) {
+        @for (task of taskStore.tasks(); track task) {
+            <app-task-card [task]="task"></app-task-card>
+        }
     }
 </div>
 <div class="flex justify-end">

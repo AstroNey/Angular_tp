@@ -19,7 +19,7 @@ export class TaskDetails {
     #router: Router = inject(Router);
 
     readonly taskId: string = this.#route.snapshot.paramMap.get('id') as string;
-    readonly taskRessource: HttpResourceRef<any> = this.#taskService.getTask(this.taskId);
+    readonly taskRessource: HttpResourceRef<any> | undefined = this.#taskService.getTask(this.taskId);
 
     protected closeDetails(): void {
         this.#router.navigate(['../../'], { relativeTo: this.#route });
