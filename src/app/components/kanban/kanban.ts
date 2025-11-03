@@ -7,13 +7,12 @@ import {NgClass} from '@angular/common';
 @Component({
   selector: 'app-kanban',
     imports: [
-        TaskList,
-        NgClass
+        TaskList
     ],
   templateUrl: './kanban.html',
   styleUrl: './kanban.css',
 })
 export class Kanban {
     taskStore = inject(TaskStore);
-    readonly gridColumns: Signal<string> = linkedSignal(() => `grid grid-cols-${this.taskStore.stateColumns()} gap-2`);
+    readonly gridColumns: Signal<string> = linkedSignal(() => `repeat(${this.taskStore.stateColumns()}, minmax(0, 1fr))`);
 }

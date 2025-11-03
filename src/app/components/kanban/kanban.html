@@ -1,5 +1,6 @@
 <div class="p-6 space-y-6">
-    <div [ngClass]="gridColumns()">
+    <div class="grid gap-2"
+         [style.grid-template-columns]="gridColumns()">
         @for (state of taskStore.states() ; track state) {
             <div class="bg-gray-100 rounded-lg flex flex-col max-h-[80vh]">
                 <h2 class="text-lg font-semibold mb-4">State</h2>
