@@ -4,7 +4,6 @@ import {TaskCard} from "./task-card/task-card";
 import {TaskDetails} from "../task-details/task-details";
 import {TaskStore} from '../../../stores/TaskStore';
 import {Task} from '../../../models/task/Task';
-import {State} from '../../../models/state/State';
 
 @Component({
     selector: 'app-task-list-component',
@@ -26,7 +25,6 @@ export class TaskList {
     tasks: WritableSignal<Task[]> = linkedSignal(() => {
         return this.#taskStore.tasks().filter(task => task.state.state === this.state()) ?? [];
     });
-
 
     public createTask(): void {
         this.#router.navigate(['create'], { relativeTo: this.#route });

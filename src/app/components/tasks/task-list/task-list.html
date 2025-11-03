@@ -1,4 +1,4 @@
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+<div class="grid grid-cols-1 gap-6 p-2">
     @if (tasks().length > 0) {
         @for (task of tasks(); track task) {
             <app-task-card [task]="task"></app-task-card>
@@ -20,9 +20,7 @@
             class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
-        <span>Ajouter une tâche</span>
     </button>
-
 </div>
 @if (taskId) {
     <app-task-details [id]="taskId"></app-task-details>

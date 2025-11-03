@@ -61,7 +61,7 @@ export const TaskStore = signalStore(
     withComputed((store) => ({
         isLoading: computed(() => store._tasks.isLoading() ?? false),
         isError: computed(() => store._tasks.error() ?? false),
-        stateColumns: computed(() => store.states.length.toString())
+        stateColumns: computed(() => store.states().length.toString())
     })),
 
     withHooks(store => ({
@@ -72,6 +72,7 @@ export const TaskStore = signalStore(
                     patchState(store, { tasks: tasks });
                 }
                 const states: State[] = store._states.value();
+                console.log("Fetched states:", states);
                 if (states) {
                     patchState(store, { states: states });
                 }
