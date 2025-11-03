@@ -1,6 +1,8 @@
+import {State} from '../state/State';
+
 export interface Task {
     id: number;
     title: string;
     description: string;
-    status: 'TODO' | 'IN_PROGRESS' | 'DONE';
+    state: State;
 }

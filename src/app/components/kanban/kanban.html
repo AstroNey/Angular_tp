@@ -1,0 +1,9 @@
+<div>
+    <div class="grid grid-cols-">
+        @for (state of taskStore.states() ; track state) {
+            <div class="bg-gray-100 rounded-lg p-4">
+                <app-task-list-component [state]="state.state"></app-task-list-component>
+            </div>
+        }
+    </div>
+</div>

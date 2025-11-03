@@ -22,18 +22,6 @@ export class TaskService {
         );
     }
 
-    getTask(id: string): HttpResourceRef<any> | undefined {
-        if (!id) {
-            return undefined;
-        }
-        return httpResource<Task[]>(() => {
-            return {
-                url: `${this.apiUrl}/${id}`,
-                method: "GET"
-            };
-        });
-    }
-
     createTask(task: Partial<Task>): Observable<Task> {
         return this.http.post<Task>(`${this.apiUrl}`, task);
     }

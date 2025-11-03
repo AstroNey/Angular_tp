@@ -6,8 +6,8 @@ export const routes: Routes = [
         path: 'tasks',
         loadComponent: () =>
             import(
-                "./components/tasks/task-list/task-list"
-                ).then((m) => m.TaskList)
+                "./components/kanban/kanban"
+                ).then((m) => m.Kanban)
     },
     {
         path: 'tasks/details/:id',

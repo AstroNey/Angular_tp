@@ -51,8 +51,8 @@
                 Statut
             </label>
             <select
-                [field]="taskForm.status"
-                [class.border-red-500]="showErrors(taskForm.status())"
+                [field]="taskForm.state.state"
+                [class.border-red-500]="showErrors(taskForm.state.state())"
                 id="status"
                 class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm
                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
@@ -60,7 +60,7 @@
                 <option>IN_PROGRESS</option>
                 <option>DONE</option>
             </select>
-            @if (showErrors(taskForm.status())) {
+            @if (showErrors(taskForm.state.state())) {
                 @for (err of taskForm.title().errors() ; track err) {
                     <div class="text-red-500 text-sm mt-1">
                         {{err.message}}
