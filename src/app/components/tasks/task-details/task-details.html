@@ -20,13 +20,13 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-500 mb-1 uppercase tracking-wider">Statut</label>
                     <span [ngClass]="{
-                    'bg-yellow-100 text-yellow-800': task()?.state?.state === 'TODO',
-                    'bg-blue-100 text-blue-800': task()?.state?.state === 'IN_PROGRESS',
-                    'bg-green-100 text-green-800': task()?.state?.state === 'DONE'
-                  }"
+                            'bg-yellow-100 text-yellow-800': task()?.state?.state === 'TODO',
+                            'bg-blue-100 text-blue-800': task()?.state?.state === 'IN_PROGRESS',
+                            'bg-green-100 text-green-800': task()?.state?.state === 'DONE'
+                          }"
                           class="text-sm font-medium uppercase px-3 py-1 rounded-full">
-              {{ task()?.state?.state?.replace('_', ' ') }}
-            </span>
+                      {{ task()?.state?.state?.replace('_', ' ') }}
+                    </span>
                 </div>
 
                 <div>

@@ -15,12 +15,12 @@ import {State} from '../../../models/state/State';
 export class TaskForm {
     #route = inject(ActivatedRoute);
     #router: Router = inject(Router);
-    #taskStore = inject(TaskStore);
+    taskStore = inject(TaskStore);
 
     readonly taskId = this.#route.snapshot.paramMap.get('id') as string; //TODO
 
     taskModel: WritableSignal<Task> = linkedSignal(() => {
-        return this.#taskStore.getTaskById(Number(this.taskId)) ?? {id: -1, title: "", description: "", state: {id: 1, state: "TODO"} as State };
+        return this.taskStore.getTaskById(Number(this.taskId)) ?? {id: -1, title: "", description: "", state: {id: 1, state: "TODO"} as State };
     });
 
     protected readonly taskForm = form(this.taskModel, (path) => {
@@ -42,8 +42,8 @@ export class TaskForm {
         try {
             submit(this.taskForm, async (form) => {
                 this.taskId ?
-                    this.#taskStore.updateTask(Number(this.taskId), form().value()) :
-                    this.#taskStore.createTask(form().value());
+                    this.taskStore.updateTask(Number(this.taskId), form().value()) :
+                    this.taskStore.createTask(form().value());
                 event.preventDefault();
                 this.#router.navigate(['../../'], {relativeTo: this.#route});
             })

@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/tasks', pathMatch: 'full' },
@@ -13,8 +13,8 @@ export const routes: Routes = [
         path: 'tasks/details/:id',
         loadComponent: () =>
             import(
-                "./components/tasks/task-list/task-list"
-                ).then((m) => m.TaskList),
+                "./components/kanban/kanban"
+                ).then((m) => m.Kanban),
     },
     {
         path: 'tasks/update/:id',

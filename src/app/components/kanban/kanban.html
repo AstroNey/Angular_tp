@@ -1,13 +1,14 @@
-<div class="p-6 space-y-6">
+<div class="p-6 space-y-6 bg-[#18171D]">
     <div class="grid gap-2"
-         [style.grid-template-columns]="gridColumns()">
-        @for (state of taskStore.states() ; track state) {
-            <div class="bg-gray-100 rounded-lg flex flex-col max-h-[80vh]">
-                <h2 class="text-lg font-semibold mb-4">State</h2>
-                <div class="bg-gray-100 rounded-lg">
-                    <app-task-list-component [state]="state.state"></app-task-list-component>
-                </div>
-            </div>
+         [style.grid-template-columns]="gridColumns()"
+         cdkDropList
+         (cdkDropListDropped)="dropState($event)">
+        @for (state of taskStore.states(); track state.id) {
+            <app-task-list-component
+                cdkDrag
+                [cdkDragData]="state"
+                [state]="state.state">
+            </app-task-list-component>
         }
     </div>
 </div>

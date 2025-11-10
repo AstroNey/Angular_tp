@@ -56,9 +56,11 @@
                 id="status"
                 class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm
                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                <option>TODO</option>
-                <option>IN_PROGRESS</option>
-                <option>DONE</option>
+                @for (state of taskStore.states(); track state.id) {
+                    <option value="{{state.state}}" selected="{{taskForm.state.state().value() === state.state}}">
+                        {{state.state}}
+                    </option>
+                }
             </select>
             @if (showErrors(taskForm.state.state())) {
                 @for (err of taskForm.title().errors() ; track err) {

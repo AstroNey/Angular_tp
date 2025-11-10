@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TaskDetails } from './task-details';
+import {TaskDetails} from './task-details';
 
 describe('TaskDetails', () => {
   let component: TaskDetails;

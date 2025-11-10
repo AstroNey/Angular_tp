@@ -1,14 +1,12 @@
 import {Component, inject, input, InputSignal} from '@angular/core';
-import {NgClass} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import { Task } from "../../../../models/task/Task";
+import {Task} from "../../../../models/task/Task";
 import {TaskStore} from '../../../../stores/TaskStore';
 
 @Component({
     selector: 'app-task-card',
     standalone: true,
     imports: [
-        NgClass,
         RouterLink
     ],
     templateUrl: './task-card.html',

@@ -4,13 +4,18 @@ import {TaskCard} from "./task-card/task-card";
 import {TaskDetails} from "../task-details/task-details";
 import {TaskStore} from '../../../stores/TaskStore';
 import {Task} from '../../../models/task/Task';
+import {NgClass} from '@angular/common';
+import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'app-task-list-component',
     standalone: true,
     imports: [
         TaskCard,
-        TaskDetails
+        TaskDetails,
+        NgClass,
+        CdkDropList,
+        CdkDrag
     ],
     templateUrl: './task-list.html',
     styleUrl: './task-list.css',
@@ -22,11 +27,28 @@ export class TaskList {
 
     readonly taskId = this.#route.snapshot.paramMap.get('id') as string;
     readonly state: InputSignal<string> = input.required();
-    tasks: WritableSignal<Task[]> = linkedSignal(() => {
-        return this.#taskStore.tasks().filter(task => task.state.state === this.state()) ?? [];
+    tasksInThisColumn: WritableSignal<Task[]> = linkedSignal(() => {
+        return this.#taskStore.tasksByState()[this.state()] ?? [];
     });
 
     public createTask(): void {
         this.#router.navigate(['create'], { relativeTo: this.#route });
+    }
+
+    dropTask(event: CdkDragDrop<Task[], Task[], any>): void {
+        const movedTask: Task = event.item.data;
+        if (event.previousContainer === event.container) {
+            this.#taskStore.updateTaskOrder({
+                taskId: movedTask.id,
+                newIndex: event.currentIndex,
+                newStatus: event.container.id
+            });
+        } else {
+            this.#taskStore.transferTask({
+                taskId: movedTask.id,
+                newStatus: event.container.id,
+                newIndex: event.currentIndex
+            });
+        }
     }
 }
