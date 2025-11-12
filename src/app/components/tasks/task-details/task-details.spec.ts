@@ -1,6 +1,8 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {TaskDetails} from './task-details';
+import { beforeEach, describe, expect, it } from "vitest";
+import {provideRouter} from '@angular/router';
 
 describe('TaskDetails', () => {
   let component: TaskDetails;
@@ -8,7 +10,12 @@ describe('TaskDetails', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaskDetails]
+        imports: [
+          TaskDetails
+        ],
+        providers: [
+            provideRouter([]),
+        ]
     })
     .compileComponents();
 

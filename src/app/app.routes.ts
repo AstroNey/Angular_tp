@@ -1,13 +1,11 @@
 import {Routes} from '@angular/router';
+import {Kanban} from './components/kanban/kanban';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/tasks', pathMatch: 'full' },
+    {path: '', redirectTo: 'tasks', pathMatch: 'full'},
     {
         path: 'tasks',
-        loadComponent: () =>
-            import(
-                "./components/kanban/kanban"
-                ).then((m) => m.Kanban)
+        component: Kanban
     },
     {
         path: 'tasks/details/:id',

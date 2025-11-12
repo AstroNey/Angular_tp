@@ -35,8 +35,14 @@
         }
     </div>
 
-    @if (taskId) {
-        <app-task-details [id]="taskId"></app-task-details>
+    @defer (when !!taskId) {
+        @if (taskId) {
+            <app-task-details [id]="taskId"></app-task-details>
+        }
+    } @error {
+        <div class="error-message">
+            An error occurred while loading task details.
+        </div>
     }
 </div>
 

@@ -12,7 +12,7 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskCard} from "./task-card/task-card";
 import {TaskDetails} from "../task-details/task-details";
-import {TaskStore} from '../../../stores/TaskStore';
+import {TaskStore} from '../../../stores/task-store';
 import {Task} from '../../../models/task/Task';
 import {NgClass} from '@angular/common';
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';

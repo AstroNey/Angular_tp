@@ -2,7 +2,7 @@ import {Component, inject, linkedSignal, WritableSignal} from '@angular/core';
 import {Task} from "../../../models/task/Task";
 import {Field, FieldState, form, maxLength, minLength, pattern, required, submit} from "@angular/forms/signals";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TaskStore} from '../../../stores/TaskStore';
+import {TaskStore} from '../../../stores/task-store';
 import {State} from '../../../models/state/State';
 
 @Component({

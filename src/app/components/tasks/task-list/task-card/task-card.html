@@ -3,11 +3,11 @@
          [routerLink]="['details', task().id]"
          class="card-container">
         <div class="card-info-container">
-            <h3 class="card-info-title">
+            <h3 class="card-info-title" id="taskTitle">
                 {{ task().title }}
             </h3>
             @if (task().description) {
-                <p class="card-info-description">
+                <p class="card-info-description" id="taskDescription">
                     {{ task().description }}
                 </p>
             }
@@ -15,8 +15,8 @@
         <div class="card-actions-container">
             <div class="card-actions-button-container">
                 <button
-                    [routerLink]="['update', task().id]"
-                    (click)="$event.stopPropagation()"
+                    id="updateTaskButton"
+                    (click)="updateTask($event)"
                     aria-label="Modifier la tâche"
                     class="card-actions-button">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icons">
@@ -24,7 +24,8 @@
                     </svg>
                 </button>
                 <button
-                    (click)="deleteTask(); $event.stopPropagation()"
+                    id="deleteTaskButton"
+                    (click)="deleteTask($event)"
                     aria-label="Supprimer la tâche"
                     class="card-actions-button delete-button">
                     <svg class="icons" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none"  stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.3">

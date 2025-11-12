@@ -4,13 +4,18 @@
          cdkDropList
          (cdkDropListDropped)="dropState($event)">
         @for (state of taskStore.states(); track state.id) {
-            <app-task-list-component
-                [(modalOpen)]="isModalOpen"
-                [cdkDragDisabled]="isModalOpen()"
-                cdkDrag
-                [cdkDragData]="state"
-                [state]="state.state">
-            </app-task-list-component>
+            @defer (on viewport)
+            {
+                <app-task-list-component
+                    [(modalOpen)]="isModalOpen"
+                    [cdkDragDisabled]="isModalOpen()"
+                    cdkDrag
+                    [cdkDragData]="state"
+                    [state]="state.state">
+                </app-task-list-component>
+            } @placeholder {
+                <div class="loading-skeleton"></div>
+            }
         }
     </div>
 </div>

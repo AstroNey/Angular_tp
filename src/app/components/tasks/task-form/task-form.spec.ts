@@ -1,18 +1,23 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {TaskUpdate} from './task-update';
+import {TaskForm} from './task-form';
+import { beforeEach, describe, expect, it } from "vitest";
+import {provideRouter} from '@angular/router';
 
-describe('TaskUpdate', () => {
-  let component: TaskUpdate;
-  let fixture: ComponentFixture<TaskUpdate>;
+describe('TaskForm', () => {
+  let component: TaskForm;
+  let fixture: ComponentFixture<TaskForm>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaskUpdate]
+        imports: [TaskForm],
+        providers: [
+          provideRouter([]),
+        ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TaskUpdate);
+    fixture = TestBed.createComponent(TaskForm);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

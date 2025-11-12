@@ -1,7 +1,7 @@
 import {Component, computed, inject, Signal} from '@angular/core';
 import {NgClass} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
-import {TaskStore} from '../../../stores/TaskStore';
+import {TaskStore} from '../../../stores/task-store';
 import {Task} from '../../../models/task/Task';
 
 @Component({
