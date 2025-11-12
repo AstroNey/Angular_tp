@@ -1,1 +1,38 @@
 @import "tailwindcss";
+
+:root {
+    --main-color: purple;
+    --main-color-dark: #563d7c;
+    --secondary-color: #6c757d;
+    --background-main-color: #18171D;
+    --background-sub-color: #43424C2F;
+    --background-sub-color-50: rgba(67, 66, 76, 0.04);
+    --background-button-color: #ffffff;
+    --border-color: #dee2e6;
+    --text-color: #343a40;
+    --secondary-text-color: #6c757d;
+    --error-color: #dc3545;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+}
+
+.status-todo {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-inprogress {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.status-done {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.icons {
+    min-height: 20px;
+    min-width: 20px;
+}

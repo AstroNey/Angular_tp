@@ -1,24 +1,23 @@
-<div class="max-w-lg mx-auto mt-10 p-8 bg-white rounded-xl shadow-lg">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+<div class="form-container">
+    <h2 class="form-title">
         Tâche
     </h2>
     <div></div>
     <form class="space-y-4" (submit)="onSubmit($event)">
         <div>
-            <label for="title" class="block text-sm font-medium text-gray-700">
+            <label for="title" class="form-label">
                 Titre
             </label>
             <input
                 [field]="taskForm.title"
-                [class.border-red-500]="showErrors(taskForm.title())"
+                [class.form-input-error-border]="showErrors(taskForm.title())"
                 type="text"
                 id="title"
                 placeholder="Faire les courses..."
-                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm
-               focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                class="form-input">
             @if (showErrors(taskForm.title())) {
                 @for (err of taskForm.title().errors() ; track err) {
-                    <div class="text-red-500 text-sm mt-1">
+                    <div class="form-input-error">
                         {{err.message}}
                     </div>
                 }
@@ -26,45 +25,44 @@
 
         </div>
         <div>
-            <label for="description" class="block text-sm font-medium text-gray-700">
+            <label for="description" class="form-label">
                 Description
             </label>
             <textarea
                 [field]="taskForm.description"
-                [class.border-red-500]="showErrors(taskForm.description())"
+                [class.form-input-error-border]="showErrors(taskForm.description())"
                 id="description"
                 rows="4"
                 placeholder="Acheter du lait, des œufs et du pain."
-                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm
-                        focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                class="form-input">
             </textarea>
             @if (showErrors(taskForm.description())) {
                 @for (err of taskForm.description().errors() ; track err) {
-                    <div class="text-red-500 text-sm mt-1">
+                    <div class="form-input-error">
                         {{err.message}}
                     </div>
                 }
             }
         </div>
         <div>
-            <label for="status" class="block text-sm font-medium text-gray-700">
+            <label for="status" class="form-label">
                 Statut
             </label>
             <select
                 [field]="taskForm.state.state"
-                [class.border-red-500]="showErrors(taskForm.state.state())"
+                [class.form-input-error-border]="showErrors(taskForm.state.state())"
                 id="status"
-                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm
-                        focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                class="form-input">
                 @for (state of taskStore.states(); track state.id) {
-                    <option value="{{state.state}}" selected="{{taskForm.state.state().value() === state.state}}">
+                    <option value="{{state.state}}"
+                            selected="{{taskForm.state.state().value() === state.state}}">
                         {{state.state}}
                     </option>
                 }
             </select>
             @if (showErrors(taskForm.state.state())) {
                 @for (err of taskForm.title().errors() ; track err) {
-                    <div class="text-red-500 text-sm mt-1">
+                    <div class="form-input-error">
                         {{err.message}}
                     </div>
                 }
@@ -74,11 +72,7 @@
             <button
                 [disabled]="taskForm().invalid()"
                 type="submit"
-                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm
-                           text-sm font-medium text-white bg-blue-600
-                           hover:bg-blue-700
-                           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
-                            disabled:opacity-50 disabled:cursor-not-allowed">
+                class="submit-button">
                 Enregistrer
             </button>
         </div>

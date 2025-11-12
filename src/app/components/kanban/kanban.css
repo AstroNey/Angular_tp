@@ -1,0 +1,9 @@
+.main-container {
+    padding: 1.5rem;
+    background-color: var(--background-main-color);
+}
+
+.grid-container {
+    display: grid;
+    gap: 0.5rem;
+}
