@@ -1,4 +1,14 @@
-import {Component, inject, input, InputSignal, linkedSignal, WritableSignal} from '@angular/core';
+import {
+    Component,
+    computed, effect,
+    inject,
+    input,
+    InputSignal,
+    linkedSignal, model,
+    output,
+    Output,
+    WritableSignal
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskCard} from "./task-card/task-card";
 import {TaskDetails} from "../task-details/task-details";
@@ -26,10 +36,18 @@ export class TaskList {
     #taskStore = inject(TaskStore);
 
     readonly taskId = this.#route.snapshot.paramMap.get('id') as string;
+    modalOpen = model(false);
+
     readonly state: InputSignal<string> = input.required();
     tasksInThisColumn: WritableSignal<Task[]> = linkedSignal(() => {
         return this.#taskStore.tasksByState()[this.state()] ?? [];
     });
+
+    constructor() {
+        effect(() => {
+            this.modalOpen.set(!!this.taskId);
+        });
+    }
 
     public createTask(): void {
         this.#router.navigate(['create'], { relativeTo: this.#route });

@@ -4,6 +4,9 @@
     padding: 1rem;
     border-radius: 0.5rem;
     background-color: var(--background-sub-color);
+    max-width: 25rem;
+    max-height: 95vh;
+    overflow-y: auto;
 }
 
 .column-header {
@@ -23,16 +26,16 @@
 
 .button-container {
     display: flex;
-    justify-content: end;
-    padding-bottom: 0.5rem;
-    padding-right: 0.5rem;
+    justify-content: space-between;
+    padding: 0 0.5rem 0 0.5rem;
+    align-items: center;
 }
 
 .add-button {
     display: inline-flex;
     align-items: center;
-    padding-inline: 1rem;
-    padding-block: 0.375rem;
+    height: 1.5rem;
+    padding-inline: 0.2rem;
     border-radius: 6px;
     background: var(--background-button-color);
     color: var(--main-color);

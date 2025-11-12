@@ -1,8 +1,19 @@
-import {Component, inject, linkedSignal, Signal} from '@angular/core';
+import {
+    Component,
+    inject,
+    linkedSignal,
+    model,
+    ModelSignal,
+    signal,
+    Signal,
+    viewChild,
+    WritableSignal
+} from '@angular/core';
 import {TaskList} from '../tasks/task-list/task-list';
 import {TaskStore} from '../../stores/TaskStore';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {State} from '../../models/state/State';
+import {NgModel} from '@angular/forms';
 
 @Component({
   selector: 'app-kanban',
@@ -11,14 +22,16 @@ import {State} from '../../models/state/State';
         TaskList,
         CdkDropList,
         CdkDrag,
-
     ],
   templateUrl: './kanban.html',
   styleUrl: './kanban.css',
 })
 export class Kanban {
+
+    isModalOpen: WritableSignal<boolean> = signal(false);
+
     taskStore = inject(TaskStore);
-    readonly gridColumns: Signal<string> = linkedSignal(() => `repeat(${this.taskStore.stateColumns()}, minmax(0, 1fr))`);
+    readonly gridColumns: Signal<string> = linkedSignal(() => `repeat(${this.taskStore.stateColumns()}, minmax(0, 320px))`);
 
     dropState(event: CdkDragDrop<State[]>) {
         const draggedItem = event.item.data;

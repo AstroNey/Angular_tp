@@ -1,6 +1,7 @@
 .main-container {
     padding: 1.5rem;
     background-color: var(--background-main-color);
+    min-height: 100vh;
 }
 
 .grid-container {
