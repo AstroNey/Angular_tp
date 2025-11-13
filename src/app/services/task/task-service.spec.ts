@@ -171,7 +171,6 @@ describe('TaskService', () => {
 
             const req = httpMock.expectOne('http://localhost:8080/api/tasks');
             expect(req.request.method).toBe('PUT');
-            console.log(req.request.body);
             expect(req.request.body).toEqual(updatedTask);
 
             req.flush(responseTask);

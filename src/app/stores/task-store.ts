@@ -71,9 +71,6 @@ export const TaskStore = signalStore(
             )
             patchState(store, (state) => ({ tasks: state.tasks.filter(t => t.id !== id) }) );
         },
-        updateDictTaskByState(): void {
-
-        },
         updateTaskOrder(params: { taskId: number; newIndex: number; newStatus: string }): void {
             const currentMapTasks = store.tasksByState()[params.newStatus];
             const index = currentMapTasks.findIndex(task => task.id === params.taskId);
@@ -103,8 +100,6 @@ export const TaskStore = signalStore(
     })),
 
     withComputed((store) => ({
-        isLoading: computed(() => store._tasks.isLoading() ?? false),
-        isError: computed(() => store._tasks.error() ?? false),
         stateColumns: computed(() => store.states().length.toString()),
         isAlreadyInitialized: computed(() => store.states().length != 0 && store.tasks().length != 0),
     })),

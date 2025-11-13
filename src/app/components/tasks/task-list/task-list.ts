@@ -1,14 +1,4 @@
-import {
-    Component,
-    computed, effect,
-    inject,
-    input,
-    InputSignal,
-    linkedSignal, model,
-    output,
-    Output,
-    WritableSignal
-} from '@angular/core';
+import {Component, effect, inject, input, InputSignal, linkedSignal, model, WritableSignal} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskCard} from "./task-card/task-card";
 import {TaskDetails} from "../task-details/task-details";
