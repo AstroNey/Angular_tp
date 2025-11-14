@@ -1,19 +1,8 @@
-import {
-    Component,
-    inject,
-    linkedSignal,
-    model,
-    ModelSignal,
-    signal,
-    Signal,
-    viewChild,
-    WritableSignal
-} from '@angular/core';
-import {TaskList} from '../tasks/task-list/task-list';
-import {TaskStore} from '../../stores/task-store';
+import {Component, inject, linkedSignal, signal, Signal, WritableSignal} from '@angular/core';
+import {TaskList} from '../../tasks/task-list/task-list';
+import {TaskStore} from '../../../stores/task-store';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
-import {State} from '../../models/state/State';
-import {NgModel} from '@angular/forms';
+import {State} from '../../../models/state/State';
 
 @Component({
   selector: 'app-kanban',

@@ -8,7 +8,7 @@ import {Task} from '../../models/task/Task';
 })
 export class TaskService {
     private http = inject(HttpClient);
-    private apiUrl = 'http://localhost:8080/api/tasks';
+    private apiUrl = 'http://localhost:8080/api/auth/tasks';
 
     getTasks(): HttpResourceRef<Task[]> {
         return httpResource<Task[]>(() => {

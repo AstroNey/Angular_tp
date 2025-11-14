@@ -1,18 +1,26 @@
 import {Routes} from '@angular/router';
-import {Kanban} from './components/kanban/kanban';
+import {Kanban} from './components/pages/kanban/kanban';
+import {Login} from './components/pages/login/login';
+import {authGuard} from './services/auth.guard';
 
 export const routes: Routes = [
-    {path: '', redirectTo: 'tasks', pathMatch: 'full'},
+    {path: '', redirectTo: 'login', pathMatch: 'full'},
+    {
+        path: 'login',
+        component: Login
+    },
     {
         path: 'tasks',
-        component: Kanban
+        component: Kanban,
+        canActivate: [authGuard]
     },
     {
         path: 'tasks/details/:id',
         loadComponent: () =>
             import(
-                "./components/kanban/kanban"
+                "./components/pages/kanban/kanban"
                 ).then((m) => m.Kanban),
+        canActivate: [authGuard]
     },
     {
         path: 'tasks/update/:id',
@@ -20,6 +28,7 @@ export const routes: Routes = [
             import(
                 "./components/tasks/task-form/task-form"
                 ).then((m) => m.TaskForm),
+        canActivate: [authGuard]
     },
     {
         path: 'tasks/create',
@@ -27,5 +36,6 @@ export const routes: Routes = [
             import(
                 "./components/tasks/task-form/task-form"
                 ).then((m) => m.TaskForm),
+        canActivate: [authGuard]
     }
 ];

@@ -1,0 +1,20 @@
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.register-text {
+    color: black;
+    text-decoration: none;
+}
+
+b {
+    color: var(--main-color);
+    cursor: pointer;
+}
+
+b:hover {
+    text-decoration: underline;
+}

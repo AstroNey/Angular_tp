@@ -1,0 +1,95 @@
+<div class="form-container">
+    <h2 class="form-title">
+        Connexion
+    </h2>
+    <div></div>
+    <form class="space-y-4" (submit)="onSubmit($event)">
+
+        <div>
+            <label for="username" class="form-label">
+                Username
+            </label>
+            <input
+                [field]="userForm.username"
+                [class.form-input-error-border]="showErrors(userForm.username())"
+                placeholder="Entrez votre nom d'utilisateur"
+                type="text"
+                id="username"
+                class="form-input">
+            @if (showErrors(userForm.username())) {
+                @for (err of userForm.username().errors() ; track err.kind) {
+                    <div class="form-input-error">
+                        {{err.message}}
+                    </div>
+                }
+            }
+
+        </div>
+
+        @if (isRegisterForm()) {
+            <div>
+                <label for="role" class="form-label">
+                    Rôle
+                </label>
+                <select
+                    id="role"
+                    [field]="userForm.role"
+                    class="form-input"
+                    [class.form-input-error-border]="showErrors(userForm.role())">
+                    @for(role of roles; track role) {
+                        @if (role === Role.UNKNOWN) {
+                            <option [value]="role" disabled>Sélectionner un rôle</option>
+                        } @else {
+                            <option [value]="role">{{ role }}</option>
+                        }
+                    }
+                </select>
+                @if (showErrors(userForm.role())) {
+                    @for (err of userForm.role().errors() ; track err.kind) {
+                        <div class="form-input-error">
+                            {{err.message}}
+                        </div>
+                    }
+                }
+            </div>
+        }
+
+        <div>
+            <label for="password" class="form-label">
+                Mot de Passe
+            </label>
+            <input
+                [field]="userForm.password"
+                [class.form-input-error-border]="showErrors(userForm.password())"
+                placeholder="Entrez votre mot de passe"
+                type="password"
+                id="password"
+                class="form-input">
+            @if (showErrors(userForm.password())) {
+                @for (err of userForm.password().errors() ; track err.kind) {
+                    <div class="form-input-error">
+                        {{err.message}}
+                    </div>
+                }
+            }
+        </div>
+
+        @if (!isRegisterForm()) {
+            <div class="register-container">
+                <span class="register-text" (click)="changeFormStateToRegister()">
+                    Pas encore de compte ? <b>Inscrivez-vous</b>
+                </span>
+            </div>
+        }
+
+        <div class="pt-4">
+            <button
+                [disabled]="userForm().invalid()"
+                type="submit"
+                class="submit-button">
+                Se connecter
+            </button>
+        </div>
+
+    </form>
+</div>

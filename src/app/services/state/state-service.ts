@@ -7,7 +7,7 @@ import {State} from '../../models/state/State';
 })
 export class StateService {
     private http = inject(HttpClient);
-    private apiUrl = 'http://localhost:8080/api/states';
+    private apiUrl = 'http://localhost:8080/api/auth/states';
 
     getStates(): HttpResourceRef<State[]> {
         return httpResource<State[]>(() => {

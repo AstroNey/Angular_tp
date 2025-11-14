@@ -153,7 +153,6 @@ describe('TaskStore', () => {
 
             store.transferTask({ taskId: 1, newStatus: 'In Progress', newIndex: 0 });
             expect(store.tasksByState()['In Progress'][0].id).toBe(1);
-            console.log(store.tasksByState());
             expect(store.tasksByState()['To Do'].length).toBe(0);
             expect(store.getTaskById(1)?.state.state).toBe('In Progress');
         });
