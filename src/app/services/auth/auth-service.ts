@@ -3,6 +3,7 @@ import {User} from '../../models/user/user';
 import {Observable, tap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {AuthResponse} from '../../models/httpModels/AuthResponse';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import {AuthResponse} from '../../models/httpModels/AuthResponse';
 export class AuthService {
 
     http = inject(HttpClient);
+    router = inject(Router);
 
     _isConnected = computed(() => localStorage.getItem('accessToken') !== null);
     get isConnected() {
@@ -51,5 +53,10 @@ export class AuthService {
             );
     }
 
+    logout(): void {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        this.router.navigate(['/login']);
+    }
 
 }

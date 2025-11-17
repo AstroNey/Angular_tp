@@ -13,7 +13,6 @@ export const authGuard: CanActivateFn = (route, state) => {
         return true;
     }
 
-    console.log('Accès non autorisé, redirection vers /login');
     router.navigate(['/login']);
     return false;
 };

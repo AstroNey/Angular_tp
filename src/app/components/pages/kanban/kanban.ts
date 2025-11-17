@@ -4,6 +4,7 @@ import {TaskStore} from '../../../stores/task-store';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {State} from '../../../models/state/State';
 import {RouterLink} from '@angular/router';
+import {Navbar} from '../navbar/navbar';
 
 @Component({
   selector: 'app-kanban',
@@ -13,6 +14,7 @@ import {RouterLink} from '@angular/router';
         CdkDropList,
         CdkDrag,
         RouterLink,
+        Navbar,
     ],
   templateUrl: './kanban.html',
   styleUrl: './kanban.css',
