@@ -13,7 +13,6 @@ import {RouterLink} from '@angular/router';
         CdkDropList,
         CdkDrag,
         RouterLink,
-
     ],
   templateUrl: './kanban.html',
   styleUrl: './kanban.css',

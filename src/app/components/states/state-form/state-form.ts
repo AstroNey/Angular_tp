@@ -2,6 +2,7 @@ import {Component, inject, signal} from '@angular/core';
 import {State} from '../../../models/state/State';
 import {Field, FieldState, form, submit} from '@angular/forms/signals';
 import {TaskStore} from '../../../stores/task-store';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-state-form',
@@ -14,6 +15,7 @@ import {TaskStore} from '../../../stores/task-store';
 export class StateForm {
 
     taskStore = inject(TaskStore);
+    route = inject(Router);
 
     stateModel = signal<State>({
         id: -1,
@@ -32,6 +34,7 @@ export class StateForm {
             submit(this.stateForm, async (form) => {
                 this.taskStore.addState(form().value());
                 event.preventDefault();
+                this.route.navigate(['tasks']);
             });
         } catch (e) {
             console.error('Form submission error:', e);

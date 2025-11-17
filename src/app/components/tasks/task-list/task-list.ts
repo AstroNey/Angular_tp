@@ -14,7 +14,6 @@ import {State} from '../../../models/state/State';
     imports: [
         TaskCard,
         TaskDetails,
-        NgClass,
         CdkDropList,
         CdkDrag
     ],
@@ -43,6 +42,11 @@ export class TaskList {
 
     public createTask(): void {
         this.#router.navigate(['create'], { relativeTo: this.#route });
+    }
+
+    public deleteState($event: Event): void {
+        $event.stopPropagation();
+        this.taskStore.deleteStateById(this.state().id);
     }
 
     connectedDropLists(): string[] {

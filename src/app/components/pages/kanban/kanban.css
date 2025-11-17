@@ -1,7 +1,10 @@
 .main-container {
+    display: flex;
+    align-items: flex-start;
     padding: 1.5rem;
     background-color: var(--background-main-color);
     min-height: 100vh;
+    gap: 20px;
 }
 
 .grid-container {
@@ -39,4 +42,21 @@
 .add-state:hover {
     border: 2px solid white;
     min-width: 2px;
+}
+
+.add-new-state-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1.5rem;
+    border-radius: 2px;
+    padding: 13px;
+    background-color: var(--background-button-color);
+    cursor: pointer;
+    color: var(--main-color);
+}
+
+.add-new-state-container:hover {
+    background-color: var(--main-color);
+    color: var(--background-button-color);
 }

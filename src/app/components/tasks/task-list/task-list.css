@@ -47,29 +47,3 @@
 .grid-task-container.cdk-drop-list-dragging .task-card:not(.cdk-drag-placeholder) {
     opacity: 0.0;
 }
-
-.button-container {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 0.5rem 0 0.5rem;
-    align-items: center;
-}
-
-.add-button {
-    display: inline-flex;
-    align-items: center;
-    height: 1.5rem;
-    padding-inline: 0.2rem;
-    border-radius: 6px;
-    background: var(--background-button-color);
-    color: var(--main-color);
-}
-
-.add-button:hover {
-    color: var(--background-button-color);
-    background-color: var(--main-color);
-}
-
-.add-button:focus {
-    outline: none;
-}

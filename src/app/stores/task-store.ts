@@ -115,6 +115,14 @@ export const TaskStore = signalStore(
                 states: [...actState.states, response]
             }));
         },
+        async deleteStateById(id: number): Promise<void> {
+            await lastValueFrom(
+                store.stateService.deleteState(id)
+            )
+            patchState(store, (actState) => ({
+                states: actState.states.filter(s => s.id !== id)
+            }));
+        }
     })),
 
     withComputed((store) => ({

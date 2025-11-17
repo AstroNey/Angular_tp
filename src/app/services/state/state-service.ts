@@ -1,7 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, httpResource, HttpResourceRef} from '@angular/common/http';
 import {State} from '../../models/state/State';
-import {Task} from '../../models/task/Task';
 import {Observable} from 'rxjs';
 
 @Injectable({
@@ -25,5 +24,9 @@ export class StateService {
 
     createState(state: Partial<State>): Observable<State> {
         return this.http.post<State>(`${this.apiUrl}`, state);
+    }
+
+    deleteState(stateId: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${stateId}`);
     }
 }
