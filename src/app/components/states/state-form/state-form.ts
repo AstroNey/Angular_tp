@@ -17,7 +17,8 @@ export class StateForm {
 
     stateModel = signal<State>({
         id: -1,
-        state: ''
+        state: '',
+        color: '#000000'
     });
 
     stateForm = form(this.stateModel);

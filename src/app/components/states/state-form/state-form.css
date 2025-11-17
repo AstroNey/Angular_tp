@@ -1,0 +1,27 @@
+.color-picker-input {
+    padding: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    background: none;
+    overflow: hidden;
+    display: block;
+    margin: 10px auto 0 auto;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.color-picker-input::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-picker-input::-webkit-color-swatch {
+    border: none;
+    border-radius: 5px;
+}
+
+.color-picker-input:focus {
+    border-color: var(--main-color);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--main-color-dark);
+}

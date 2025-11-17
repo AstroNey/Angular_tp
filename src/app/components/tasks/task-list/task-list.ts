@@ -6,6 +6,7 @@ import {TaskStore} from '../../../stores/task-store';
 import {Task} from '../../../models/task/Task';
 import {NgClass} from '@angular/common';
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
+import {State} from '../../../models/state/State';
 
 @Component({
     selector: 'app-task-list-component',
@@ -28,9 +29,10 @@ export class TaskList {
     readonly taskId = this.#route.snapshot.paramMap.get('id') as string;
     modalOpen = model(false);
 
-    readonly state: InputSignal<string> = input.required();
+    readonly state: InputSignal<State> = input.required();
     tasksInThisColumn: WritableSignal<Task[]> = linkedSignal(() => {
-        return this.taskStore.tasksByState()[this.state()] ?? [];
+        const state: string = this.state().state;
+        return this.taskStore.tasksByState()[state] ?? [];
     });
 
     constructor() {
