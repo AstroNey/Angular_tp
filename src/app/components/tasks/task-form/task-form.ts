@@ -17,10 +17,10 @@ export class TaskForm {
     #router: Router = inject(Router);
     taskStore = inject(TaskStore);
 
-    readonly taskId = this.#route.snapshot.paramMap.get('id') as string; //TODO
+    readonly taskId = this.#route.snapshot.paramMap.get('id') as string;
 
     taskModel: WritableSignal<Task> = linkedSignal(() => {
-        return this.taskStore.getTaskById(Number(this.taskId)) ?? {id: -1, title: "", description: "", state: {id: 1, state: "TODO"} as State };
+        return this.taskStore.getTaskById(Number(this.taskId)) ?? {id: -1, title: "", description: "", state: {id: 1, state: "TODO"} as State, order: 0};
     });
 
     protected readonly taskForm = form(this.taskModel, (path) => {
@@ -41,11 +41,15 @@ export class TaskForm {
     protected onSubmit(event: Event) {
         try {
             submit(this.taskForm, async (form) => {
-                this.taskId ?
-                    this.taskStore.updateTask(Number(this.taskId), form().value()) :
+                let routeToGo = ['../'];
+                if (this.taskId) {
+                    this.taskStore.updateTask(Number(this.taskId), form().value());
+                    routeToGo = ['../../'];
+                } else {
                     this.taskStore.createTask(form().value());
+                }
                 event.preventDefault();
-                this.#router.navigate(['../../'], {relativeTo: this.#route});
+                this.#router.navigate(routeToGo, {relativeTo: this.#route});
             })
             event.preventDefault();
         } catch (e) {

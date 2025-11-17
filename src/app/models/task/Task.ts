@@ -5,4 +5,5 @@ export interface Task {
     title: string;
     description: string;
     state: State;
+    order: number;
 }

@@ -30,6 +30,10 @@ export class TaskService {
         return this.http.put<Task>(`${this.apiUrl}`, task);
     }
 
+    updateTasksOrder(tasks: Partial<Task>[]): Observable<void> {
+        return this.http.put<void>(`${this.apiUrl}/orders`, tasks);
+    }
+
     deleteTask(id: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }

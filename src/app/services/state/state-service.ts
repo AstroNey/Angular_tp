@@ -1,6 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, httpResource, HttpResourceRef} from '@angular/common/http';
 import {State} from '../../models/state/State';
+import {Task} from '../../models/task/Task';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +21,9 @@ export class StateService {
                 defaultValue: []
             }
         );
+    }
+
+    createState(state: Partial<State>): Observable<State> {
+        return this.http.post<State>(`${this.apiUrl}`, state);
     }
 }

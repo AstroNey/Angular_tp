@@ -2,20 +2,26 @@
     <div class="grid-container"
          [style.grid-template-columns]="gridColumns()"
          cdkDropList
+         cdkDropListOrientation="horizontal"
          (cdkDropListDropped)="dropState($event)">
         @for (state of taskStore.states(); track state.id) {
-            @defer (on viewport)
-            {
-                <app-task-list-component
-                    [(modalOpen)]="isModalOpen"
-                    [cdkDragDisabled]="isModalOpen()"
-                    cdkDrag
-                    [cdkDragData]="state"
-                    [state]="state.state">
-                </app-task-list-component>
-            } @placeholder {
-                <div class="loading-skeleton"></div>
-            }
+            <div class="co-container"
+                 cdkDragBoundary=".grid-container"
+                 [cdkDragDisabled]="isModalOpen()"
+                 cdkDrag
+                 [cdkDragData]="state">
+                <div class="add-state" routerLink="/state/create"></div>
+                @defer (on viewport)
+                {
+                    <app-task-list-component
+                        class="drag-container"
+                        [(modalOpen)]="isModalOpen"
+                        [state]="state.state">
+                    </app-task-list-component>
+                } @placeholder {
+                    <div class="loading-skeleton"></div>
+                }
+            </div>
         }
     </div>
 </div>

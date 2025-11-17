@@ -3,6 +3,7 @@ import {TaskList} from '../../tasks/task-list/task-list';
 import {TaskStore} from '../../../stores/task-store';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {State} from '../../../models/state/State';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-kanban',
@@ -11,12 +12,13 @@ import {State} from '../../../models/state/State';
         TaskList,
         CdkDropList,
         CdkDrag,
+        RouterLink,
+
     ],
   templateUrl: './kanban.html',
   styleUrl: './kanban.css',
 })
 export class Kanban {
-
     isModalOpen: WritableSignal<boolean> = signal(false);
 
     taskStore = inject(TaskStore);

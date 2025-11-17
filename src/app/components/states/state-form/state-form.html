@@ -1,0 +1,34 @@
+<div class="form-container">
+    <h2 class="form-title">
+        Création d'un statut
+    </h2>
+    <form class="space-y-4" (submit)="onSubmit($event)">
+        <div>
+            <label for="state" class="form-label">
+                Nom du statut
+            </label>
+            <input
+                [field]="stateForm.state"
+                [class.form-input-error-border]="showErrors(stateForm.state())"
+                placeholder="Entrez le nom du statut"
+                type="text"
+                id="state"
+                class="form-input"/>
+            @if (showErrors(stateForm.state())) {
+                @for (err of stateForm.state().errors() ; track err.kind) {
+                    <div class="form-input-error">
+                        {{err.message}}
+                    </div>
+                }
+            }
+        </div>
+        <div class="pt-4">
+            <button
+                [disabled]="stateForm().invalid()"
+                type="submit"
+                class="submit-button">
+                Enregistrer
+            </button>
+        </div>
+    </form>
+</div>

@@ -23,14 +23,14 @@ import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
 export class TaskList {
     #route = inject(ActivatedRoute);
     #router: Router = inject(Router);
-    #taskStore = inject(TaskStore);
+    taskStore = inject(TaskStore);
 
     readonly taskId = this.#route.snapshot.paramMap.get('id') as string;
     modalOpen = model(false);
 
     readonly state: InputSignal<string> = input.required();
     tasksInThisColumn: WritableSignal<Task[]> = linkedSignal(() => {
-        return this.#taskStore.tasksByState()[this.state()] ?? [];
+        return this.taskStore.tasksByState()[this.state()] ?? [];
     });
 
     constructor() {
@@ -43,16 +43,20 @@ export class TaskList {
         this.#router.navigate(['create'], { relativeTo: this.#route });
     }
 
+    connectedDropLists(): string[] {
+        return this.taskStore.states().map(state => state.state);
+    }
+
     dropTask(event: CdkDragDrop<Task[], Task[], any>): void {
         const movedTask: Task = event.item.data;
         if (event.previousContainer === event.container) {
-            this.#taskStore.updateTaskOrder({
+            this.taskStore.updateTaskOrder({
                 taskId: movedTask.id,
                 newIndex: event.currentIndex,
                 newStatus: event.container.id
             });
         } else {
-            this.#taskStore.transferTask({
+            this.taskStore.transferTask({
                 taskId: movedTask.id,
                 newStatus: event.container.id,
                 newIndex: event.currentIndex

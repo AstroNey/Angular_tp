@@ -61,8 +61,8 @@ export class Login {
                 }
                 else {
                     this.#authService.login(form().value()).subscribe({
-                        next: (res: AuthResponse) => {
-                            this.#router.navigate(['/tasks']);
+                        next: async (res: AuthResponse) => {
+                            await this.#router.navigate(['/tasks']);
                         }
                     });
                 }

@@ -10,6 +10,14 @@ export const routes: Routes = [
         component: Login
     },
     {
+        path: 'state/create',
+        loadComponent: () =>
+            import(
+                "./components/states/state-form/state-form"
+                ).then((m) => m.StateForm),
+        canActivate: [authGuard]
+    },
+    {
         path: 'tasks',
         component: Kanban,
         canActivate: [authGuard]

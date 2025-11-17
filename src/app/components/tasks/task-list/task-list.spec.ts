@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {TaskList} from './task-list';
-import { beforeEach, describe, expect, it } from "vitest";
+import {beforeEach, describe, expect, it} from "vitest";
 import {provideRouter} from '@angular/router';
 import {State} from '../../../models/state/State';
 

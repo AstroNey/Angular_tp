@@ -1,19 +1,18 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {Kanban} from './kanban';
-import {beforeEach, describe, expect, it} from "vitest";
+import {StateForm} from './state-form';
 
-describe('Kanban', () => {
-  let component: Kanban;
-  let fixture: ComponentFixture<Kanban>;
+describe('StateForm', () => {
+  let component: StateForm;
+  let fixture: ComponentFixture<StateForm>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Kanban]
+      imports: [StateForm]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Kanban);
+    fixture = TestBed.createComponent(StateForm);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

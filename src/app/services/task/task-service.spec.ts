@@ -1,8 +1,8 @@
 import {TestBed} from '@angular/core/testing';
 
 import {TaskService} from './task-service';
-import {beforeEach, describe, expect, it } from "vitest";
-import { Task } from "../../models/task/Task";
+import {beforeEach, describe, expect, it} from "vitest";
+import {Task} from "../../models/task/Task";
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideHttpClient} from '@angular/common/http';
 

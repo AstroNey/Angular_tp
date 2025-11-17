@@ -1,4 +1,4 @@
-import {computed, inject, Injectable, signal} from '@angular/core';
+import {computed, inject, Injectable} from '@angular/core';
 import {User} from '../../models/user/user';
 import {Observable, tap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
@@ -14,6 +14,10 @@ export class AuthService {
     _isConnected = computed(() => localStorage.getItem('accessToken') !== null);
     get isConnected() {
         return this._isConnected();
+    }
+
+    getToken(): string | null {
+        return localStorage.getItem('accessToken');
     }
 
     register(user: Partial<User>): Observable<AuthResponse> {

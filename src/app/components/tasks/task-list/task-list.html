@@ -21,7 +21,7 @@
     </div>
     <div class="grid-task-container"
          cdkDropList
-         [cdkDropListConnectedTo]="['DONE','IN PROGRESS','TODO']"
+         [cdkDropListConnectedTo]="connectedDropLists()"
          (cdkDropListDropped)="dropTask($event)"
          [cdkDropListData]="tasksInThisColumn()"
          id="{{state()}}">
