@@ -8,6 +8,7 @@
     min-width: 100%;
     max-height: 95vh;
     overflow-y: auto;
+    gap: 5px;
 }
 
 .column-header {

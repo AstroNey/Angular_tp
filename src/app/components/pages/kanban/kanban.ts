@@ -24,7 +24,7 @@ export class Kanban {
     isModalOpen: WritableSignal<boolean> = signal(false);
 
     stateStore = inject(StateStore);
-    readonly gridColumns: Signal<string> = linkedSignal(() => `repeat(${this.stateStore.stateColumns()}, minmax(0, 320px))`);
+    readonly gridColumns: Signal<string> = linkedSignal(() => `repeat(${this.stateStore.stateColumns()}, minmax(0, 270px))`);
 
     dropState(event: CdkDragDrop<State[]>): void {
         const draggedItem: any = event.item.data;

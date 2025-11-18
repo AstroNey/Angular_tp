@@ -12,21 +12,22 @@
                  cdkDrag
                  [cdkDragData]="state">
                 <div class="add-state" routerLink="/state/create"></div>
-                @defer (on viewport)
-                {
-                    <app-task-list-component
-                        class="drag-container"
-                        [(modalOpen)]="isModalOpen"
-                        [state]="state">
-                    </app-task-list-component>
-                } @placeholder {
-                    <div class="loading-skeleton"></div>
-                }
+                <div style="min-width: 100%">
+                    @defer (on viewport)
+                    {
+                        <app-task-list-component
+                            class="drag-container"
+                            [(modalOpen)]="isModalOpen"
+                            [state]="state">
+                        </app-task-list-component>
+                    } @placeholder {
+                        <div class="loading-skeleton"></div>
+                    }
+                </div>
             </div>
         }
     </div>
-    <div class="add-new-state-container">
-        Add new state
+    <div class="button">
         <div routerLink="/state/create">
             <svg
                 xmlns="http://www.w3.org/2000/svg"

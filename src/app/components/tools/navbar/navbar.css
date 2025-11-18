@@ -28,32 +28,6 @@
     margin-right: 8px;
 }
 
-.navbar-right {
-    /* Rien de spécifique ici pour le moment */
-}
-
-.navbar-button {
-    background-color: transparent;
-    border: 1px solid #444;
-    color: #f5f5f5;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.9em;
-    transition: background-color 0.2s, border-color 0.2s;
-}
-
-.navbar-button:hover {
-    background-color: #2c2c34;
-    border-color: #666;
-}
-
-.navbar-button svg path {
-    stroke: #f5f5f5;
-}
 
 .navbar-button:hover svg path {
     stroke: #fff;

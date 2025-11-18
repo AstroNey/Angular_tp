@@ -28,6 +28,8 @@
 
 .co-container {
     display: flex;
+    padding-left: 1px;
+    gap: 3px;
 }
 
 .drag-container {
@@ -40,7 +42,7 @@
 }
 
 .add-state:hover {
-    border: 2px solid white;
+    border: 1px solid white;
     min-width: 2px;
 }
 
