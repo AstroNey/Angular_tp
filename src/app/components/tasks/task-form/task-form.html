@@ -40,7 +40,7 @@
                 [class.form-input-error-border]="showErrors(taskForm.state.state())"
                 id="status"
                 class="form-input">
-                @for (state of taskStore.states(); track state.id) {
+                @for (state of stateStore.states(); track state.id) {
                     <option value="{{state.state}}"
                             selected="{{taskForm.state.state().value() === state.state}}">
                         {{state.state}}

@@ -18,12 +18,7 @@
                 </div>
                 <div>
                     <label class="field-label">Statut</label>
-                    <span class="status-badge"
-                          [ngClass]="{
-                        'status-todo': task()?.state?.state === 'TODO',
-                        'status-inprogress': task()?.state?.state === 'IN_PROGRESS',
-                        'status-done': task()?.state?.state === 'DONE'
-                      }">
+                    <span class="status-badge" [ngStyle]="{'background-color': task()?.state?.color}">
                   {{ task()?.state?.state?.replace('_', ' ') }}
                 </span>
                 </div>

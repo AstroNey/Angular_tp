@@ -1,7 +1,7 @@
 import {Component, inject, input, InputSignal} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Task} from "../../../../models/task/Task";
-import {TaskStore} from '../../../../stores/task-store';
+import {TaskStore} from '../../../../stores/tasks/task-store';
 
 @Component({
     selector: 'app-task-card',

@@ -1,12 +1,12 @@
 import {afterEach, beforeEach, describe, expect, it, vi} from "vitest";
 import {TestBed} from '@angular/core/testing';
 import {TaskStore} from './task-store';
-import {TaskService} from '../services/task/task-service';
-import {Task} from "../models/task/Task";
+import {TaskService} from '../../services/task/task-service';
+import {Task} from "../../models/task/Task";
 import {HttpResourceRef} from '@angular/common/http';
-import {State} from '../models/state/State';
+import {State} from '../../models/state/State';
 import {signal, WritableSignal} from '@angular/core';
-import {StateService} from '../services/state/state-service';
+import {StateService} from '../../services/state/state-service';
 import {of} from 'rxjs';
 
 describe('TaskStore', () => {

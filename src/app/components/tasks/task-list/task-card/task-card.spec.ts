@@ -9,7 +9,7 @@ import {Kanban} from '../../../kanban/kanban';
 import {TaskForm} from '../../task-form/task-form';
 import {TaskDetails} from '../../task-details/task-details';
 import {Location} from '@angular/common';
-import {TaskStore} from '../../../../stores/task-store';
+import {TaskStore} from '../../../../stores/tasks/task-store';
 
 describe('TaskCard', () => {
     let component: TaskCard;

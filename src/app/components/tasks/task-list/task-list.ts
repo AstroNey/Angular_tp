@@ -12,10 +12,11 @@ import {
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskCard} from "./task-card/task-card";
 import {TaskDetails} from "../task-details/task-details";
-import {TaskStore} from '../../../stores/task-store';
+import {TaskStore} from '../../../stores/tasks/task-store';
 import {Task} from '../../../models/task/Task';
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
 import {State} from '../../../models/state/State';
+import {StateStore} from '../../../stores/states/state-store';
 
 @Component({
     selector: 'app-task-list-component',
@@ -33,6 +34,7 @@ export class TaskList {
     #route: ActivatedRoute = inject(ActivatedRoute);
     #router: Router = inject(Router);
     taskStore = inject(TaskStore);
+    stateStore = inject(StateStore);
 
     readonly taskId: string = this.#route.snapshot.paramMap.get('id') as string;
     modalOpen: ModelSignal<boolean> = model(false);
@@ -44,7 +46,7 @@ export class TaskList {
     });
 
     connectedDropLists(): string[] {
-        return this.taskStore.states().map(state => state.state);
+        return this.stateStore.states().map(state => state.state);
     }
 
     constructor() {
@@ -59,7 +61,7 @@ export class TaskList {
 
     public deleteState(event: Event): void {
         event.stopPropagation();
-        this.taskStore.deleteStateById(this.state().id);
+        this.stateStore.deleteStateById(this.state().id);
     }
 
     dropTask(event: CdkDragDrop<Task[], Task[], any>): void {

@@ -1,14 +1,15 @@
 import {Component, computed, inject, Signal} from '@angular/core';
-import {NgClass} from '@angular/common';
+import {NgClass, NgStyle} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
-import {TaskStore} from '../../../stores/task-store';
+import {TaskStore} from '../../../stores/tasks/task-store';
 import {Task} from '../../../models/task/Task';
 
 @Component({
     selector: 'app-task-details',
     standalone: true,
     imports: [
-        NgClass
+        NgClass,
+        NgStyle
     ],
     templateUrl: './task-details.html',
     styleUrl: './task-details.css',

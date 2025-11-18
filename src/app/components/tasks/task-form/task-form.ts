@@ -1,7 +1,8 @@
 import {Component, inject, linkedSignal, WritableSignal} from '@angular/core';
 import {Task} from "../../../models/task/Task";
 import {
-    Field, FieldPath,
+    Field,
+    FieldPath,
     FieldState,
     FieldTree,
     form,
@@ -12,9 +13,10 @@ import {
     submit
 } from "@angular/forms/signals";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TaskStore} from '../../../stores/task-store';
+import {TaskStore} from '../../../stores/tasks/task-store';
 import {State} from '../../../models/state/State';
 import {FormErrors} from '../../tools/forms/form-errors/form-errors';
+import {StateStore} from '../../../stores/states/state-store';
 
 @Component({
     selector: 'app-task-update',
@@ -27,6 +29,7 @@ export class TaskForm {
     #route: ActivatedRoute = inject(ActivatedRoute);
     #router: Router = inject(Router);
     taskStore = inject(TaskStore);
+    stateStore = inject(StateStore);
 
     readonly taskId: string = this.#route.snapshot.paramMap.get('id') as string;
 

@@ -1,9 +1,9 @@
 import {Component, inject, signal, WritableSignal} from '@angular/core';
 import {State} from '../../../models/state/State';
 import {Field, FieldState, FieldTree, form, submit} from '@angular/forms/signals';
-import {TaskStore} from '../../../stores/task-store';
 import {Router} from '@angular/router';
 import {FormErrors} from '../../tools/forms/form-errors/form-errors';
+import {StateStore} from '../../../stores/states/state-store';
 
 @Component({
   selector: 'app-state-form',
@@ -16,7 +16,7 @@ import {FormErrors} from '../../tools/forms/form-errors/form-errors';
 })
 export class StateForm {
 
-    taskStore = inject(TaskStore);
+    stateStore = inject(StateStore);
     route: Router = inject(Router);
 
     stateModel: WritableSignal<State> = signal<State>({
@@ -34,7 +34,7 @@ export class StateForm {
     protected onSubmit(event: SubmitEvent): void {
         try {
             submit(this.stateForm, async (form: FieldTree<State>): Promise<void> => {
-                this.taskStore.addState(form().value());
+                this.stateStore.addState(form().value());
                 event.preventDefault();
                 this.route.navigate(['tasks']);
             });

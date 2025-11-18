@@ -5,7 +5,7 @@
          cdkDropList
          cdkDropListOrientation="horizontal"
          (cdkDropListDropped)="dropState($event)">
-        @for (state of taskStore.states(); track state.id) {
+        @for (state of stateStore.states(); track state.id) {
             <div class="co-container"
                  cdkDragBoundary=".grid-container"
                  [cdkDragDisabled]="isModalOpen()"

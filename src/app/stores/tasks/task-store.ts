@@ -1,22 +1,20 @@
 import {patchState, signalStore, withComputed, withHooks, withMethods, withProps, withState} from '@ngrx/signals';
-import {Task} from '../models/task/Task';
+import {Task} from '../../models/task/Task';
 import {computed, effect, inject} from '@angular/core';
-import {TaskService} from '../services/task/task-service';
+import {TaskService} from '../../services/task/task-service';
 import {lastValueFrom} from 'rxjs/internal/lastValueFrom';
-import {State} from '../models/state/State';
-import {StateService} from '../services/state/state-service';
+import {State} from '../../models/state/State';
+import {StateStore} from '../states/state-store';
 
 interface TaskState {
     tasks: Task[];
     tasksByState: Record<string, Task[]>;
-    states: State[];
     error: string | null;
 }
 
 const initialState: TaskState = {
     tasks: [],
     tasksByState: {},
-    states: [],
     error: null
 };
 
@@ -26,17 +24,16 @@ export const TaskStore = signalStore(
 
     withProps(() => ({
         taskService: inject(TaskService),
-        stateService: inject(StateService),
+        stateStore: inject(StateStore),
     })),
 
-    withProps(({ taskService, stateService }) => ({
-        _tasks: taskService.getTasks(),
-        _states: stateService.getStates(),
+    withProps(({ taskService }) => ({
+        _tasks: taskService.getTasks()
     })),
 
     withMethods((store) => ({
         initMap(): void {
-            for (const state of store.states()) {
+            for (const state of store.stateStore.states()) {
                 const tasksForState: Task[] = store.tasks().filter((task: Task) => task.state.state === state.state);
                 const orderedTasksForState: Task[] = tasksForState.sort((a: Task, b: Task) => a.order - b.order);
                 patchState(store, (actState) => ({
@@ -92,7 +89,7 @@ export const TaskStore = signalStore(
                 const index: number = sourceTaskState.findIndex((task: Task): boolean => task.id === params.taskId);
                 const taskToMove: Task = sourceTaskState.splice(index, 1)[0];
                 if (taskToMove) {
-                    taskToMove.state = store.states().find((state: State): boolean => state.state === params.newStatus)!;
+                    taskToMove.state = store.stateStore.states().find((state: State): boolean => state.state === params.newStatus)!;
                     targetTaskState.splice(params.newIndex, 0, taskToMove);
                     targetTaskState.map((task: Task): number => task.order = targetTaskState.findIndex((t: Task): boolean => t.id === task.id));
                     sourceTaskState.map((task: Task): number => task.order = sourceTaskState.findIndex((t: Task): boolean => t.id === task.id));
@@ -102,32 +99,12 @@ export const TaskStore = signalStore(
                     store.taskService.updateTasksOrder(updatedTasks)
                 )
             }
-
-        },
-        updateStatesOrder(newStatesOrder: State[]): void {
-            patchState(store, { states: [...newStatesOrder]});
-        },
-        async addState(state: State): Promise<void> {
-            const response: State =  await lastValueFrom(
-                store.stateService.createState(state)
-            );
-            patchState(store, (actState) => ({
-                states: [...actState.states, response]
-            }));
-        },
-        async deleteStateById(id: number): Promise<void> {
-            await lastValueFrom(
-                store.stateService.deleteState(id)
-            )
-            patchState(store, (actState) => ({
-                states: actState.states.filter((s: State): boolean => s.id !== id)
-            }));
         }
     })),
 
     withComputed((store) => ({
-        stateColumns: computed((): string => store.states().length.toString()),
-        isAlreadyInitialized: computed((): boolean => store.states().length != 0 && store.tasks().length != 0),
+        isAlreadyInitialized: computed((): boolean => store.tasks().length != 0),
+        isReadyToInit: computed((): boolean => store.stateStore.states().length != 0),
     })),
 
     withHooks(store => ({
@@ -137,11 +114,7 @@ export const TaskStore = signalStore(
                 if (tasks && !store.isAlreadyInitialized()) {
                     patchState(store, { tasks: tasks });
                 }
-                const states: State[] = store._states.value();
-                if (states && !store.isAlreadyInitialized()) {
-                    patchState(store, { states: states });
-                }
-                if (store.isAlreadyInitialized()) {
+                if (store.isAlreadyInitialized() && store.isReadyToInit()) {
                     store.initMap();
                 }
             });
