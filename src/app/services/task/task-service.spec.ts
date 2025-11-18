@@ -43,8 +43,8 @@ describe('TaskService', () => {
 
         it('should load tasks from the API', async () => {
             const mockTasks: Task[] = [
-                { id: 1, title: 'Task 1', description: 'Description 1', state: { id: 1, state: 'OPEN'} },
-                { id: 2, title: 'Task 2', description: 'Description 2', state: { id: 2, state: 'IN_PROGRESS' } }
+                { id: 1, title: 'Task 1', description: 'Description 1', state: { id: 1, state: 'OPEN', color: "#FFFFFF"}, order : 0 },
+                { id: 2, title: 'Task 2', description: 'Description 2', state: { id: 2, state: 'IN_PROGRESS', color: "#FFFFFF"}, order : 1 },
             ];
 
             let resourceRef: any;
@@ -117,8 +117,8 @@ describe('TaskService', () => {
 
     describe('createTask', () => {
         it('should create a new task via POST request', () => {
-            const newTask: Partial<Task> = { title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN' } };
-            const createdTask: Task = { id: 3, title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN' } };
+            const newTask: Partial<Task> = { title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN', color: "#FFFFFF"}, order : 0 };
+            const createdTask: Task = { id: 3, title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN' , color: "#FFFFFF"}, order : 1 };
 
             service.createTask(newTask).subscribe(task => {
                 expect(task).toEqual(createdTask);
@@ -132,7 +132,7 @@ describe('TaskService', () => {
         });
 
         it('should handle create task error', () => {
-            const newTask: Partial<Task> = { title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN' } };
+            const newTask: Partial<Task> = { title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN', color: "#FFFFFF"}, order : 0 };
             let receivedError: any | null = null;
 
             service.createTask(newTask).subscribe({
@@ -163,7 +163,7 @@ describe('TaskService', () => {
     describe('updateTask', () => {
         it('should update an existing task via PUT request', () => {
             const updatedTask: Partial<Task> = { id: 1, title: 'Updated Task', description: 'Test' };
-            const responseTask: Partial<Task> = { id: 1, title: 'Updated Task', description: 'Test', state: { id: 2, state: 'IN_PROGRESS' } };
+            const responseTask: Partial<Task> = { id: 1, title: 'Updated Task', description: 'Test', state: { id: 2, state: 'IN_PROGRESS', color: "#FFFFFF"}, order : 0 };
 
             service.updateTask(updatedTask).subscribe(task => {
                 expect(task).toEqual(responseTask);

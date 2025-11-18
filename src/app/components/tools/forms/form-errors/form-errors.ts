@@ -8,7 +8,7 @@ import {FieldState, MaybeFieldTree} from '@angular/forms/signals';
   styleUrl: './form-errors.css',
 })
 export class FormErrors {
-    @Input() ref!: MaybeFieldTree<any, string>;
+    @Input({ required: true }) ref!: MaybeFieldTree<any, string>;
 
     protected showErrors(field: FieldState<string,  string>): boolean {
         return field.touched() && field.errors().length > 0;

@@ -14,8 +14,8 @@ describe('TaskStore', () => {
     let stateServiceMock: StateService;
     let store: InstanceType<typeof TaskStore>;
 
-    const dfMockTasks: Task[] = [{ id: 1, title: 'Task 1', description: 'Description 1', state: { id: 1, state: 'To Do' } }];
-    const dfMockStates: State[] = [{ id: 1, state: 'To Do' }];
+    const dfMockTasks: Task[] = [{ id: 1, title: 'Task 1', description: 'Description 1', state: { id: 1, state: 'To Do', color: "#FFFFFF" }, order: 0 }];
+    const dfMockStates: State[] = [{ id: 1, state: 'To Do', color: "#FFFFFF" }];
     let mockTasks: Task[] = structuredClone(dfMockTasks);
     let mockStates: State[] = structuredClone(dfMockStates);
 
@@ -31,6 +31,9 @@ describe('TaskStore', () => {
         taskServiceMock = {
             getTasks: vi.fn(() => mockTasksResource),
             deleteTask: vi.fn(() => of(void 0)),
+            updateTask: vi.fn(),
+            createTask: vi.fn(),
+            updateTasksOrder: vi.fn(() => of(void 0)),
         } as any;
         stateServiceMock = {
             getStates: vi.fn(() => mockStatesResource),
@@ -71,7 +74,6 @@ describe('TaskStore', () => {
     it('should initialize with default state', () => {
         expect(store.tasks()).toEqual([]);
         expect(store.tasksByState()).toEqual({});
-        expect(store.states()).toEqual([]);
         expect(store.error()).toBeNull();
     });
 
@@ -79,23 +81,9 @@ describe('TaskStore', () => {
         await load();
 
         expect(store.tasks()).toEqual(mockTasks);
-        expect(store.states()).toEqual(mockStates);
     });
 
-    it('should compute stateColumns when states change', async () => {
-        const mockStates: State[] = [
-            { id: 1, state: 'State 1' }, { id: 2, state: 'State 2' }
-        ];
-
-        const statesResource: HttpResourceRef<State[]> = stateServiceMock.getStates();
-        (statesResource.value as WritableSignal<State[]>).set(mockStates);
-
-        await new Promise(resolve => setTimeout(resolve, 0));
-
-        expect(Number(store.stateColumns())).toBe(mockStates.length);
-    });
-
-    it('should compute isAlreadyInitialized when tasks and states are loaded', async () => {
+    it('should compute isAlreadyInitialized when tasks are loaded', async () => {
         await load();
 
         expect(store.isAlreadyInitialized()).toBe(true);
@@ -126,18 +114,9 @@ describe('TaskStore', () => {
             expect(task).toBeUndefined();
         });
 
-        it('should update states order', async () => {
-            await load();
-            const newStatesOrder: State[] = [
-                { id: 2, state: 'In Progress' },
-                { id: 1, state: 'To Do' }
-            ];
-            store.updateStatesOrder(newStatesOrder);
-            expect(store.states()).toEqual(newStatesOrder);
-        });
 
         it ('should update task order within the same state', async () => {
-            const task2: Task = { id: 2, title: 'Task 2', description: 'Description 2', state: { id: 1, state: 'To Do' } };
+            const task2: Task = { id: 2, title: 'Task 2', description: 'Description 2', state: { id: 1, state: 'To Do', color: "#FFFFFF" }, order: 1 };
             mockTasks.push(task2);
             await load();
 
@@ -147,7 +126,7 @@ describe('TaskStore', () => {
         });
 
         it ('should transfer task to a different state', async () => {
-            const stateInProgress: State = { id: 2, state: 'In Progress' };
+            const stateInProgress: State = { id: 2, state: 'In Progress', color: "#FFFFFF" };
             mockStates.push(stateInProgress);
             await load();
 
@@ -166,7 +145,7 @@ describe('TaskStore', () => {
 
         it('should update task by id', async () => {
             await load();
-            const updatedTask: Task = { id: 1, title: 'Updated Task 1', description: 'Updated Description 1', state: { id: 1, state: 'To Do' } };
+            const updatedTask: Task = { id: 1, title: 'Updated Task 1', description: 'Updated Description 1', state: { id: 1, state: 'To Do', color: "#FFFFFF" }, order : 1 };
             taskServiceMock.updateTask = vi.fn(() => of(updatedTask));
             await store.updateTask(1, updatedTask);
             expect(taskServiceMock.updateTask).toHaveBeenCalledWith(updatedTask);
@@ -175,7 +154,7 @@ describe('TaskStore', () => {
 
         it('should create a new task', async () => {
             await load();
-            const newTask: Task = { id: 2, title: 'New Task', description: 'New Description', state: { id: 1, state: 'To Do' } };
+            const newTask: Task = { id: 2, title: 'New Task', description: 'New Description', state: { id: 1, state: 'To Do', color: "#FFFFFF" }, order: 1 };
             taskServiceMock.createTask = vi.fn(() => of(newTask));
             await store.createTask(newTask);
             expect(taskServiceMock.createTask).toHaveBeenCalledWith(newTask);

@@ -3,13 +3,13 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {TaskCard} from './task-card';
 import {beforeEach, describe, expect, it, vi} from "vitest";
 import {Task} from '../../../../models/task/Task';
-import {provideRouter, Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, provideRouter, Router, RouterLink} from '@angular/router';
 import {By} from '@angular/platform-browser';
-import {Kanban} from '../../../kanban/kanban';
 import {TaskForm} from '../../task-form/task-form';
 import {TaskDetails} from '../../task-details/task-details';
 import {Location} from '@angular/common';
 import {TaskStore} from '../../../../stores/tasks/task-store';
+import {Kanban} from '../../../pages/kanban/kanban';
 
 describe('TaskCard', () => {
     let component: TaskCard;
@@ -50,7 +50,8 @@ describe('TaskCard', () => {
             id: 1,
             title: 'Tâche de test',
             description: 'Ceci est une description de test',
-            state: {id: 1, state: 'TODO'}
+            state: {id: 1, state: 'TODO', color: '#FFFFFF'},
+            order: 0
         } as Task;
 
         fixture.componentRef.setInput('task', mockTask);
@@ -86,11 +87,12 @@ describe('TaskCard', () => {
     it('should navigate to update page when edit button is clicked', async () => {
         const navigateSpy = vi.spyOn(router, 'navigate');
         const editButton = fixture.nativeElement.querySelector('#updateTaskButton');
+        const activatedRoute = TestBed.inject(ActivatedRoute);
 
         editButton.click();
         await fixture.whenStable();
 
-        expect(navigateSpy).toHaveBeenCalledWith(['update', 1]);
+        expect(navigateSpy).toHaveBeenCalledWith(['update', 1], { relativeTo: activatedRoute });
     });
 
     it('should navigate to details when card is clicked', async () => {
@@ -107,13 +109,14 @@ describe('TaskCard', () => {
     it('should not navigate to details when edit button is clicked', async () => {
         const navigateSpy = vi.spyOn(router, 'navigate');
         const editButton = fixture.nativeElement.querySelector('#updateTaskButton');
+        const activatedRoute = TestBed.inject(ActivatedRoute);
 
         editButton.click();
         await fixture.whenStable();
 
         // Should navigate to update, not details
         expect(navigateSpy).not.toHaveBeenCalledWith(['details', 1], expect.anything());
-        expect(navigateSpy).toHaveBeenCalledWith(['update', 1]);
+        expect(navigateSpy).toHaveBeenCalledWith(['update', 1], { relativeTo: activatedRoute });
     });
 
     it('should call taskStore.deleteTaskById when delete button is clicked', async () => {

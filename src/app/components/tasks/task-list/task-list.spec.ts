@@ -21,7 +21,7 @@ describe('TaskList', () => {
     fixture = TestBed.createComponent(TaskList);
     component = fixture.componentInstance;
 
-    const mockState: State = { id: 1, state: 'TODO' };
+    const mockState: State = { id: 1, state: 'TODO', color: "#FFFFFF" };
     fixture.componentRef.setInput('state', mockState);
 
     fixture.detectChanges();
