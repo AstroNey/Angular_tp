@@ -1,5 +1,5 @@
 import {Component, computed, inject, Signal} from '@angular/core';
-import {NgClass, NgStyle} from '@angular/common';
+import {NgStyle} from '@angular/common';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskStore} from '../../../stores/tasks/task-store';
 import {Task} from '../../../models/task/Task';
@@ -8,7 +8,6 @@ import {Task} from '../../../models/task/Task';
     selector: 'app-task-details',
     standalone: true,
     imports: [
-        NgClass,
         NgStyle
     ],
     templateUrl: './task-details.html',
