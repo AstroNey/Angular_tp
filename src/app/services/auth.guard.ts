@@ -9,7 +9,6 @@ export const authGuard: CanActivateFn = (route, state) => {
 
     // La logique de vérification
     if (authService.isConnected) {
-        console.log(authService.isConnected);
         return true;
     }
 
@@ -17,17 +16,3 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
 };
 
-export const preventAuthGuard: CanActivateFn = (route, state) => {
-
-    const authService = inject(AuthService);
-    const router = inject(Router);
-
-    // La logique de vérification
-    if (authService.isConnected) {
-        router.navigate(['/tasks']);
-        return true;
-    }
-
-    router.navigate(['/login']);
-    return false;
-};

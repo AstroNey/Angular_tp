@@ -13,13 +13,44 @@ export class AuthService {
     http: HttpClient = inject(HttpClient);
     router: Router = inject(Router);
 
-    _isConnected: Signal<boolean> = computed((): boolean => localStorage.getItem('accessToken') !== null);
+    _isConnected: Signal<boolean> = computed((): boolean => this.checkTokenValidity());
     get isConnected(): boolean {
         return this._isConnected();
     }
 
     getToken(): string | null {
         return localStorage.getItem('accessToken');
+    }
+
+    decodeToken(): any {
+        const token = this.getToken();
+        if (!token) {
+            return null;
+        }
+
+        const payload = token.split('.')[1];
+        const decodedPayload = atob(payload);
+        return JSON.parse(decodedPayload);
+    }
+
+    getExpirationDate(): Date | null {
+        const decoded = this.decodeToken();
+        if (!decoded || !decoded.exp) {
+            return null;
+        }
+
+        const date = new Date(0);
+        date.setUTCSeconds(decoded.exp);
+        return date;
+    }
+
+    checkTokenValidity(): boolean {
+        const expirationDate = this.getExpirationDate();
+        if (!expirationDate) {
+            return false;
+        }
+
+        return expirationDate > new Date();
     }
 
     register(user: Partial<User>): Observable<AuthResponse> {
