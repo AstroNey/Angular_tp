@@ -47,6 +47,7 @@ export class AuthService {
             })
             .pipe(
                 tap((res: AuthResponse) => {
+                    console.log(res);
                     localStorage.setItem('accessToken', res.accessToken);
                     localStorage.setItem('refreshToken', res.refreshToken);
                 })
@@ -58,5 +59,4 @@ export class AuthService {
         localStorage.removeItem('refreshToken');
         this.router.navigate(['/login']);
     }
-
 }

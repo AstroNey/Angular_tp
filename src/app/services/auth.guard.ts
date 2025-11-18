@@ -4,12 +4,27 @@ import {AuthService} from './auth/auth-service';
 
 export const authGuard: CanActivateFn = (route, state) => {
 
-    // Nous "injectons" les services nécessaires DANS la fonction
     const authService = inject(AuthService);
     const router = inject(Router);
 
     // La logique de vérification
     if (authService.isConnected) {
+        console.log(authService.isConnected);
+        return true;
+    }
+
+    router.navigate(['/login']);
+    return false;
+};
+
+export const preventAuthGuard: CanActivateFn = (route, state) => {
+
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    // La logique de vérification
+    if (authService.isConnected) {
+        router.navigate(['/tasks']);
         return true;
     }
 

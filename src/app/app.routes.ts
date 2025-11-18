@@ -1,13 +1,14 @@
 import {Routes} from '@angular/router';
 import {Kanban} from './components/pages/kanban/kanban';
 import {Login} from './components/pages/login/login';
-import {authGuard} from './services/auth.guard';
+import {authGuard, preventAuthGuard} from './services/auth.guard';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'login', pathMatch: 'full'},
     {
         path: 'login',
-        component: Login
+        component: Login,
+        canActivate: [preventAuthGuard]
     },
     {
         path: 'state/create',
