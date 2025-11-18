@@ -1,13 +1,15 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, signal, WritableSignal} from '@angular/core';
 import {State} from '../../../models/state/State';
-import {Field, FieldState, form, submit} from '@angular/forms/signals';
+import {Field, FieldState, FieldTree, form, submit} from '@angular/forms/signals';
 import {TaskStore} from '../../../stores/task-store';
 import {Router} from '@angular/router';
+import {FormErrors} from '../../tools/forms/form-errors/form-errors';
 
 @Component({
   selector: 'app-state-form',
     imports: [
-        Field
+        Field,
+        FormErrors
     ],
   templateUrl: './state-form.html',
   styleUrl: './state-form.css',
@@ -15,23 +17,23 @@ import {Router} from '@angular/router';
 export class StateForm {
 
     taskStore = inject(TaskStore);
-    route = inject(Router);
+    route: Router = inject(Router);
 
-    stateModel = signal<State>({
+    stateModel: WritableSignal<State> = signal<State>({
         id: -1,
         state: '',
         color: '#000000'
     });
 
-    stateForm = form(this.stateModel);
+    stateForm: FieldTree<State> = form(this.stateModel);
 
     protected showErrors(field: FieldState<string,  string>): boolean {
         return field.touched() && field.errors().length > 0;
     }
 
-    protected onSubmit(event: SubmitEvent) {
+    protected onSubmit(event: SubmitEvent): void {
         try {
-            submit(this.stateForm, async (form) => {
+            submit(this.stateForm, async (form: FieldTree<State>): Promise<void> => {
                 this.taskStore.addState(form().value());
                 event.preventDefault();
                 this.route.navigate(['tasks']);

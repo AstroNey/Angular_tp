@@ -14,17 +14,18 @@ import {TaskStore} from '../../../../stores/task-store';
 })
 export class TaskCard {
     task: InputSignal<Task> = input.required<Task>();
-    #taskStore = inject(TaskStore);
-    #router = inject(Router);
-    #route = inject(ActivatedRoute);
 
-    updateTask($event: Event): void {
-        $event.stopPropagation();
+    #taskStore = inject(TaskStore);
+    #router: Router = inject(Router);
+    #route: ActivatedRoute = inject(ActivatedRoute);
+
+    updateTask(event: Event): void {
+        event.stopPropagation();
         this.#router.navigate(['update', this.task().id], { relativeTo: this.#route });
     }
 
-    deleteTask($event: Event): void {
-        $event.stopPropagation();
+    deleteTask(event: Event): void {
+        event.stopPropagation();
         this.#taskStore.deleteTaskById(this.task().id);
     }
 }

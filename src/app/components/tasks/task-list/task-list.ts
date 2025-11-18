@@ -1,10 +1,19 @@
-import {Component, effect, inject, input, InputSignal, linkedSignal, model, WritableSignal} from '@angular/core';
+import {
+    Component,
+    effect,
+    inject,
+    input,
+    InputSignal,
+    linkedSignal,
+    model,
+    ModelSignal,
+    WritableSignal
+} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskCard} from "./task-card/task-card";
 import {TaskDetails} from "../task-details/task-details";
 import {TaskStore} from '../../../stores/task-store';
 import {Task} from '../../../models/task/Task';
-import {NgClass} from '@angular/common';
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
 import {State} from '../../../models/state/State';
 
@@ -21,12 +30,12 @@ import {State} from '../../../models/state/State';
     styleUrl: './task-list.css',
 })
 export class TaskList {
-    #route = inject(ActivatedRoute);
+    #route: ActivatedRoute = inject(ActivatedRoute);
     #router: Router = inject(Router);
     taskStore = inject(TaskStore);
 
-    readonly taskId = this.#route.snapshot.paramMap.get('id') as string;
-    modalOpen = model(false);
+    readonly taskId: string = this.#route.snapshot.paramMap.get('id') as string;
+    modalOpen: ModelSignal<boolean> = model(false);
 
     readonly state: InputSignal<State> = input.required();
     tasksInThisColumn: WritableSignal<Task[]> = linkedSignal(() => {
@@ -34,8 +43,12 @@ export class TaskList {
         return this.taskStore.tasksByState()[state] ?? [];
     });
 
+    connectedDropLists(): string[] {
+        return this.taskStore.states().map(state => state.state);
+    }
+
     constructor() {
-        effect(() => {
+        effect((): void => {
             this.modalOpen.set(!!this.taskId);
         });
     }
@@ -44,13 +57,9 @@ export class TaskList {
         this.#router.navigate(['create'], { relativeTo: this.#route });
     }
 
-    public deleteState($event: Event): void {
-        $event.stopPropagation();
+    public deleteState(event: Event): void {
+        event.stopPropagation();
         this.taskStore.deleteStateById(this.state().id);
-    }
-
-    connectedDropLists(): string[] {
-        return this.taskStore.states().map(state => state.state);
     }
 
     dropTask(event: CdkDragDrop<Task[], Task[], any>): void {

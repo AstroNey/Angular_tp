@@ -1,0 +1,7 @@
+@if (showErrors(ref!())) {
+    @for (err of ref!().errors() ; track err.kind) {
+        <div class="form-input-error">
+            {{err.message}}
+        </div>
+    }
+}

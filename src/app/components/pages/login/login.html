@@ -16,14 +16,7 @@
                 type="text"
                 id="username"
                 class="form-input">
-            @if (showErrors(userForm.username())) {
-                @for (err of userForm.username().errors() ; track err.kind) {
-                    <div class="form-input-error">
-                        {{err.message}}
-                    </div>
-                }
-            }
-
+            <app-form-errors [ref]="userForm.username"></app-form-errors>
         </div>
 
         @if (isRegisterForm()) {
@@ -44,13 +37,7 @@
                         }
                     }
                 </select>
-                @if (showErrors(userForm.role())) {
-                    @for (err of userForm.role().errors() ; track err.kind) {
-                        <div class="form-input-error">
-                            {{err.message}}
-                        </div>
-                    }
-                }
+                <app-form-errors [ref]="userForm.role"></app-form-errors>
             </div>
         }
 
@@ -65,13 +52,7 @@
                 type="password"
                 id="password"
                 class="form-input">
-            @if (showErrors(userForm.password())) {
-                @for (err of userForm.password().errors() ; track err.kind) {
-                    <div class="form-input-error">
-                        {{err.message}}
-                    </div>
-                }
-            }
+            <app-form-errors [ref]="userForm.password"></app-form-errors>
         </div>
 
         @if (!isRegisterForm()) {

@@ -37,8 +37,8 @@ export const TaskStore = signalStore(
     withMethods((store) => ({
         initMap(): void {
             for (const state of store.states()) {
-                const tasksForState = store.tasks().filter(task => task.state.state === state.state);
-                const orderedTasksForState = tasksForState.sort((a, b) => a.order - b.order);
+                const tasksForState: Task[] = store.tasks().filter((task: Task) => task.state.state === state.state);
+                const orderedTasksForState: Task[] = tasksForState.sort((a: Task, b: Task) => a.order - b.order);
                 patchState(store, (actState) => ({
                     tasksByState: {
                         ...actState.tasksByState,
@@ -63,41 +63,41 @@ export const TaskStore = signalStore(
                 store.taskService.updateTask(task)
             );
             patchState(store, (state) => ({
-                tasks: state.tasks.map(t => t.id === id ? response : t)
+                tasks: state.tasks.map((t: Task) => t.id === id ? response : t)
             }));
         },
-        async deleteTaskById(id: number) {
+        async deleteTaskById(id: number): Promise<void> {
             await lastValueFrom(
                 store.taskService.deleteTask(id)
             )
-            patchState(store, (state) => ({ tasks: state.tasks.filter(t => t.id !== id) }) );
+            patchState(store, (state) =>  ({ tasks: state.tasks.filter((t: Task): boolean => t.id !== id) }) );
         },
         async updateTaskOrder(params: { taskId: number; newIndex: number; newStatus: string }): Promise<void> {
-            const currentMapTasks = store.tasksByState()[params.newStatus];
-            const index = currentMapTasks.findIndex(task => task.id === params.taskId);
-            const taskToMove = currentMapTasks.splice(index, 1)[0];
+            const currentMapTasks: Task[] = store.tasksByState()[params.newStatus];
+            const index: number = currentMapTasks.findIndex((task: Task): boolean => task.id === params.taskId);
+            const taskToMove: Task = currentMapTasks.splice(index, 1)[0];
             if (taskToMove) {
                 currentMapTasks.splice(params.newIndex, 0, taskToMove);
-                currentMapTasks.map((task) => task.order = currentMapTasks.findIndex(t => t.id === task.id));
+                currentMapTasks.map((task: Task): number => task.order = currentMapTasks.findIndex((t: Task): boolean => t.id === task.id));
             }
             await lastValueFrom(
                 store.taskService.updateTasksOrder(currentMapTasks)
             )
         },
         async transferTask(params: { taskId: number; newStatus: string; newIndex: number }): Promise<void> {
-            const sourceState = this.getTaskById(params.taskId)?.state.state;
+            const sourceState: string | undefined = this.getTaskById(params.taskId)?.state.state;
             if (sourceState) {
-                const sourceTaskState = store.tasksByState()[sourceState];
-                const targetTaskState = store.tasksByState()[params.newStatus];
-                const index = sourceTaskState.findIndex(task => task.id === params.taskId);
-                const taskToMove = sourceTaskState.splice(index, 1)[0];
+                const sourceTaskState: Task[] = store.tasksByState()[sourceState];
+                const targetTaskState: Task[] = store.tasksByState()[params.newStatus];
+                const index: number = sourceTaskState.findIndex((task: Task): boolean => task.id === params.taskId);
+                const taskToMove: Task = sourceTaskState.splice(index, 1)[0];
                 if (taskToMove) {
-                    taskToMove.state = store.states().find(state => state.state === params.newStatus)!;
+                    taskToMove.state = store.states().find((state: State): boolean => state.state === params.newStatus)!;
                     targetTaskState.splice(params.newIndex, 0, taskToMove);
-                    targetTaskState.map((task) => task.order = targetTaskState.findIndex(t => t.id === task.id));
-                    sourceTaskState.map((task) => task.order = sourceTaskState.findIndex(t => t.id === task.id));
+                    targetTaskState.map((task: Task): number => task.order = targetTaskState.findIndex((t: Task): boolean => t.id === task.id));
+                    sourceTaskState.map((task: Task): number => task.order = sourceTaskState.findIndex((t: Task): boolean => t.id === task.id));
                 }
-                const updatedTasks = [...sourceTaskState, ...targetTaskState];
+                const updatedTasks: Task[] = [...sourceTaskState, ...targetTaskState];
                 await lastValueFrom(
                     store.taskService.updateTasksOrder(updatedTasks)
                 )
@@ -120,19 +120,19 @@ export const TaskStore = signalStore(
                 store.stateService.deleteState(id)
             )
             patchState(store, (actState) => ({
-                states: actState.states.filter(s => s.id !== id)
+                states: actState.states.filter((s: State): boolean => s.id !== id)
             }));
         }
     })),
 
     withComputed((store) => ({
-        stateColumns: computed(() => store.states().length.toString()),
-        isAlreadyInitialized: computed(() => store.states().length != 0 && store.tasks().length != 0),
+        stateColumns: computed((): string => store.states().length.toString()),
+        isAlreadyInitialized: computed((): boolean => store.states().length != 0 && store.tasks().length != 0),
     })),
 
     withHooks(store => ({
-        onInit() {
-            effect(() => {
+        onInit(): void {
+            effect((): void => {
                 const tasks: Task[] = store._tasks.value();
                 if (tasks && !store.isAlreadyInitialized()) {
                     patchState(store, { tasks: tasks });

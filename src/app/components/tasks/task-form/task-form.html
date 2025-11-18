@@ -15,14 +15,7 @@
                 id="title"
                 placeholder="Faire les courses..."
                 class="form-input">
-            @if (showErrors(taskForm.title())) {
-                @for (err of taskForm.title().errors() ; track err) {
-                    <div class="form-input-error">
-                        {{err.message}}
-                    </div>
-                }
-            }
-
+            <app-form-errors [ref]="taskForm.title"></app-form-errors>
         </div>
         <div>
             <label for="description" class="form-label">
@@ -36,13 +29,7 @@
                 placeholder="Acheter du lait, des œufs et du pain."
                 class="form-input">
             </textarea>
-            @if (showErrors(taskForm.description())) {
-                @for (err of taskForm.description().errors() ; track err) {
-                    <div class="form-input-error">
-                        {{err.message}}
-                    </div>
-                }
-            }
+            <app-form-errors [ref]="taskForm.description"></app-form-errors>
         </div>
         <div>
             <label for="status" class="form-label">
@@ -60,13 +47,7 @@
                     </option>
                 }
             </select>
-            @if (showErrors(taskForm.state.state())) {
-                @for (err of taskForm.title().errors() ; track err) {
-                    <div class="form-input-error">
-                        {{err.message}}
-                    </div>
-                }
-            }
+            <app-form-errors [ref]="taskForm.state.state"></app-form-errors>
         </div>
         <div class="pt-4">
             <button

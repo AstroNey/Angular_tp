@@ -54,9 +54,11 @@
     background-color: var(--background-button-color);
     cursor: pointer;
     color: var(--main-color);
+    font-size: 84%;
 }
 
 .add-new-state-container:hover {
     background-color: var(--main-color);
     color: var(--background-button-color);
 }
+

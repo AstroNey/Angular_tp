@@ -1,4 +1,4 @@
-import {computed, inject, Injectable} from '@angular/core';
+import {computed, inject, Injectable, Signal} from '@angular/core';
 import {User} from '../../models/user/user';
 import {Observable, tap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
@@ -10,11 +10,11 @@ import {Router} from '@angular/router';
 })
 export class AuthService {
 
-    http = inject(HttpClient);
-    router = inject(Router);
+    http: HttpClient = inject(HttpClient);
+    router: Router = inject(Router);
 
-    _isConnected = computed(() => localStorage.getItem('accessToken') !== null);
-    get isConnected() {
+    _isConnected: Signal<boolean> = computed((): boolean => localStorage.getItem('accessToken') !== null);
+    get isConnected(): boolean {
         return this._isConnected();
     }
 

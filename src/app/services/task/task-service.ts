@@ -7,14 +7,14 @@ import {Task} from '../../models/task/Task';
     providedIn: 'root'
 })
 export class TaskService {
-    private http = inject(HttpClient);
-    private apiUrl = 'http://localhost:8080/api/auth/tasks';
+    private http: HttpClient = inject(HttpClient);
+    private apiUrl: string = 'http://localhost:8080/api/tasks';
 
     getTasks(): HttpResourceRef<Task[]> {
-        return httpResource<Task[]>(() => {
+        return httpResource<Task[]>((): {url: string; method: string} => {
                 return {
                     url: this.apiUrl,
-                    method: "GET"
+                    method: "GET",
                 };
             }, {
                 defaultValue: []

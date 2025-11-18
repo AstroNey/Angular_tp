@@ -17,21 +17,6 @@
     --info-color: #17a2b8;
 }
 
-.status-todo {
-    background-color: #fef3c7;
-    color: #92400e;
-}
-
-.status-inprogress {
-    background-color: #dbeafe;
-    color: #1e40af;
-}
-
-.status-done {
-    background-color: #d1fae5;
-    color: #065f46;
-}
-
 .icons {
     min-height: 20px;
     min-width: 20px;

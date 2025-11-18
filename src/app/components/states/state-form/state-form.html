@@ -14,13 +14,7 @@
                 type="text"
                 id="state"
                 class="form-input"/>
-            @if (showErrors(stateForm.state())) {
-                @for (err of stateForm.state().errors() ; track err.kind) {
-                    <div class="form-input-error">
-                        {{err.message}}
-                    </div>
-                }
-            }
+            <app-form-errors [ref]="stateForm.state"></app-form-errors>
         </div>
         <div>
             <label for="status-color">Couleur du statut</label>
@@ -31,13 +25,7 @@
                 type="color"
                 id="status-color"
                 value="#800080">
-            @if (showErrors(stateForm.state())) {
-                @for (err of stateForm.state().errors() ; track err.kind) {
-                    <div class="form-input-error">
-                        {{err.message}}
-                    </div>
-                }
-            }
+            <app-form-errors [ref]="stateForm.color"></app-form-errors>
         </div>
         <div class="pt-4">
             <button

@@ -4,7 +4,7 @@ import {TaskStore} from '../../../stores/task-store';
 import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 import {State} from '../../../models/state/State';
 import {RouterLink} from '@angular/router';
-import {Navbar} from '../navbar/navbar';
+import {Navbar} from '../../tools/navbar/navbar';
 
 @Component({
   selector: 'app-kanban',
@@ -14,6 +14,7 @@ import {Navbar} from '../navbar/navbar';
         CdkDropList,
         CdkDrag,
         RouterLink,
+        Navbar,
         Navbar,
     ],
   templateUrl: './kanban.html',
@@ -25,11 +26,11 @@ export class Kanban {
     taskStore = inject(TaskStore);
     readonly gridColumns: Signal<string> = linkedSignal(() => `repeat(${this.taskStore.stateColumns()}, minmax(0, 320px))`);
 
-    dropState(event: CdkDragDrop<State[]>) {
-        const draggedItem = event.item.data;
+    dropState(event: CdkDragDrop<State[]>): void {
+        const draggedItem: any = event.item.data;
         if (draggedItem && draggedItem.hasOwnProperty('state')) {
-            const currentStates = this.taskStore.states();
-            const newStatesOrder = [...currentStates];
+            const currentStates: State[] = this.taskStore.states();
+            const newStatesOrder: State[] = [...currentStates];
             moveItemInArray(newStatesOrder, event.previousIndex, event.currentIndex);
             this.taskStore.updateStatesOrder(newStatesOrder);
         }

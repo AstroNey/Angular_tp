@@ -7,11 +7,11 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class StateService {
-    private http = inject(HttpClient);
-    private apiUrl = 'http://localhost:8080/api/auth/states';
+    private http: HttpClient = inject(HttpClient);
+    private apiUrl: string = 'http://localhost:8080/api/states';
 
     getStates(): HttpResourceRef<State[]> {
-        return httpResource<State[]>(() => {
+        return httpResource<State[]>((): {url: string; method : string} => {
                 return {
                     url: this.apiUrl,
                     method: "GET"
