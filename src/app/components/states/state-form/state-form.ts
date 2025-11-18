@@ -1,9 +1,20 @@
 import {Component, inject, signal, WritableSignal} from '@angular/core';
 import {State} from '../../../models/state/State';
-import {Field, FieldState, FieldTree, form, submit} from '@angular/forms/signals';
+import {
+    Field,
+    FieldPath,
+    FieldState,
+    FieldTree,
+    form,
+    maxLength,
+    minLength, pattern,
+    required,
+    submit
+} from '@angular/forms/signals';
 import {Router} from '@angular/router';
 import {FormErrors} from '../../tools/forms/form-errors/form-errors';
 import {StateStore} from '../../../stores/states/state-store';
+import {Task} from '../../../models/task/Task';
 
 @Component({
   selector: 'app-state-form',
@@ -25,7 +36,11 @@ export class StateForm {
         color: '#000000'
     });
 
-    stateForm: FieldTree<State> = form(this.stateModel);
+    stateForm: FieldTree<State> = form(this.stateModel, (path: FieldPath<State>) => {
+        required(path.state, { message: "State name is required." });
+        minLength(path.state, 3, { message: "State name must be at least 3 characters long."})
+        maxLength(path.state, 15, { message: "State name cannot exceed 15 characters."});
+    });
 
     protected showErrors(field: FieldState<string,  string>): boolean {
         return field.touched() && field.errors().length > 0;

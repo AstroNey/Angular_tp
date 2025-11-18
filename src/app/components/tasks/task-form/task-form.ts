@@ -40,9 +40,9 @@ export class TaskForm {
     protected readonly taskForm: FieldTree<Task> = form(this.taskModel, (path: FieldPath<Task>) => {
         required(path.title, { message: "Title is required." });
         minLength(path.title, 3, { message: "Title must be at least 3 characters long."});
-        maxLength(path.title, 20, { message: "Title must be at least 3 characters long."});
+        maxLength(path.title, 30, { message: "Title cannot exceed 30 characters."});
 
-        maxLength(path.description, 250, { message: "Description cannot exceed 250 characters."});
+        maxLength(path.description, 255, { message: "Description cannot exceed 255 characters."});
 
         required(path.state.state, { message: "Status is required." });
         pattern(path.state.state, /^(TODO|IN_PROGRESS|DONE)$/, { message: "Status must be one of: TODO, IN_PROGRESS, DONE" });
