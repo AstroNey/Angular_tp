@@ -27,6 +27,9 @@ export const StateStore = signalStore(
     })),
 
     withMethods((store) => ({
+        reloadStore(): void {
+            store._states.reload();
+        },
         updateStatesOrder(newStatesOrder: State[]): void {
             patchState(store, { states: [...newStatesOrder]});
         },
@@ -51,13 +54,18 @@ export const StateStore = signalStore(
     withComputed((store) => ({
         stateColumns: computed((): string => store.states().length.toString()),
         isAlreadyInitialized: computed((): boolean => store.states().length != 0),
+        patternStates: computed((): RegExp => {
+            const states = store.states().map((s: State): string => s.state);
+            const patternString = `^(${states.join('|')})$`;
+            return new RegExp(patternString);
+        })
     })),
 
     withHooks(store => ({
         onInit(): void {
             effect((): void => {
                 const states: State[] = store._states.value();
-                if (states && !store.isAlreadyInitialized()) {
+                if (states) {
                     patchState(store, { states: states });
                 }
             });

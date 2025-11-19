@@ -1,7 +1,7 @@
 import {HttpHandlerFn, HttpRequest} from '@angular/common/http';
 import {AuthService} from './auth/auth-service';
 import {inject} from '@angular/core';
-import {catchError, throwError} from 'rxjs';
+import {catchError, EMPTY, throwError} from 'rxjs';
 import {Router} from '@angular/router';
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
@@ -9,6 +9,9 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
     const router: Router = inject(Router);
     const token: string | null = authService.getToken();
 
+    if(isProtectedRequest(req.url, token)) {
+        return EMPTY;
+    }
     if (!token) {
         return next(req);
     }
@@ -26,9 +29,16 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
                 return throwError(() => error);
             }
 
-            // Pour toutes les autres erreurs, on les propage
             return throwError(() => error);
         })
     );
+}
+
+function isProtectedRequest(url: string, token: string | null): boolean {
+    const urlSegments = url.split('/');
+    const isStatesRequest = urlSegments.includes('states');
+    const isTasksRequest = urlSegments.includes('tasks');
+
+    return (isStatesRequest || isTasksRequest) && !token;
 }
 

@@ -40,6 +40,7 @@
                 [class.form-input-error-border]="showErrors(taskForm.state.state())"
                 id="status"
                 class="form-input">
+                <option value="A9fZ0c" disabled selected>Sélectionner un statut</option>
                 @for (state of stateStore.states(); track state.id) {
                     <option value="{{state.state}}"
                             selected="{{taskForm.state.state().value() === state.state}}">

@@ -1,5 +1,4 @@
 import {Routes} from '@angular/router';
-import {Kanban} from './components/pages/kanban/kanban';
 import {Login} from './components/pages/login/login';
 import {authGuard} from './services/auth.guard';
 
@@ -10,40 +9,43 @@ export const routes: Routes = [
         component: Login
     },
     {
-        path: 'state/create',
-        loadComponent: () =>
-            import(
-                "./components/states/state-form/state-form"
-                ).then((m) => m.StateForm),
-        canActivate: [authGuard]
-    },
-    {
         path: 'tasks',
-        component: Kanban,
-        canActivate: [authGuard]
-    },
-    {
-        path: 'tasks/details/:id',
+        canMatch: [authGuard],
         loadComponent: () =>
             import(
                 "./components/pages/kanban/kanban"
-                ).then((m) => m.Kanban),
-        canActivate: [authGuard]
+                ).then((m) => m.Kanban)
+    },
+    {
+        path: 'state/create',
+        canMatch: [authGuard],
+        loadComponent: () =>
+            import(
+                "./components/states/state-form/state-form"
+                ).then((m) => m.StateForm)
+    },
+    {
+        path: 'tasks/details/:id',
+        canMatch: [authGuard],
+        loadComponent: () =>
+            import(
+                "./components/pages/kanban/kanban"
+                ).then((m) => m.Kanban)
     },
     {
         path: 'tasks/update/:id',
+        canMatch: [authGuard],
         loadComponent: () =>
             import(
                 "./components/tasks/task-form/task-form"
-                ).then((m) => m.TaskForm),
-        canActivate: [authGuard]
+                ).then((m) => m.TaskForm)
     },
     {
         path: 'tasks/create',
+        canMatch: [authGuard],
         loadComponent: () =>
             import(
                 "./components/tasks/task-form/task-form"
                 ).then((m) => m.TaskForm),
-        canActivate: [authGuard]
     }
 ];

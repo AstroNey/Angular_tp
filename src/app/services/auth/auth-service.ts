@@ -1,4 +1,4 @@
-import {computed, inject, Injectable, Signal} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {User} from '../../models/user/user';
 import {Observable, tap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
@@ -13,9 +13,12 @@ export class AuthService {
     http: HttpClient = inject(HttpClient);
     router: Router = inject(Router);
 
-    _isConnected: Signal<boolean> = computed((): boolean => this.checkTokenValidity());
-    get isConnected(): boolean {
-        return this._isConnected();
+    getConnectionState(): boolean {
+        if (!this.checkTokenValidity()) {
+            localStorage.removeItem('accessToken');
+            return false;
+        }
+        return true;
     }
 
     getToken(): string | null {
@@ -47,9 +50,9 @@ export class AuthService {
     checkTokenValidity(): boolean {
         const expirationDate = this.getExpirationDate();
         if (!expirationDate) {
+            localStorage.removeItem('accessToken');
             return false;
         }
-
         return expirationDate > new Date();
     }
 
@@ -65,6 +68,7 @@ export class AuthService {
                 tap((res: AuthResponse) => {
                     localStorage.setItem('accessToken', res.accessToken);
                     localStorage.setItem('refreshToken', res.refreshToken);
+                    this.router.navigate(['/tasks']);
                 })
             );
     }
@@ -78,9 +82,9 @@ export class AuthService {
             })
             .pipe(
                 tap((res: AuthResponse) => {
-                    console.log(res);
                     localStorage.setItem('accessToken', res.accessToken);
                     localStorage.setItem('refreshToken', res.refreshToken);
+                    this.router.navigate(['/tasks']);
                 })
             );
     }

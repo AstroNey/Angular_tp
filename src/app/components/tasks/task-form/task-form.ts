@@ -34,7 +34,7 @@ export class TaskForm {
     readonly taskId: string = this.#route.snapshot.paramMap.get('id') as string;
 
     taskModel: WritableSignal<Task> = linkedSignal(() => {
-        return this.taskStore.getTaskById(Number(this.taskId)) ?? {id: -1, title: "", description: "", state: {id: 1, state: "TODO"} as State, order: 0};
+        return this.taskStore.getTaskById(Number(this.taskId)) ?? {id: -1, title: "", description: "", state: {id: -1, state: "A9fZ0c"} as State, order: 0};
     });
 
     protected readonly taskForm: FieldTree<Task> = form(this.taskModel, (path: FieldPath<Task>) => {
@@ -45,7 +45,7 @@ export class TaskForm {
         maxLength(path.description, 255, { message: "Description cannot exceed 255 characters."});
 
         required(path.state.state, { message: "Status is required." });
-        pattern(path.state.state, /^(TODO|IN_PROGRESS|DONE)$/, { message: "Status must be one of: TODO, IN_PROGRESS, DONE" });
+        pattern(path.state.state, this.stateStore.patternStates(), { message: "Status must be one of: " + this.stateStore.states().map(s => s.state).join(", ") });
     });
 
     protected showErrors(field: FieldState<string,  string>): boolean {
@@ -63,7 +63,7 @@ export class TaskForm {
                     this.taskStore.createTask(form().value());
                 }
                 event.preventDefault();
-                this.#router.navigate(routeToGo, {relativeTo: this.#route});
+                await this.#router.navigate(routeToGo, {relativeTo: this.#route});
             });
             event.preventDefault();
         } catch (e) {

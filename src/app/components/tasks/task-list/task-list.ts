@@ -6,7 +6,7 @@ import {
     InputSignal,
     linkedSignal,
     model,
-    ModelSignal,
+    ModelSignal, OnInit,
     WritableSignal
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -45,14 +45,14 @@ export class TaskList {
         return this.taskStore.tasksByState()[state] ?? [];
     });
 
-    connectedDropLists(): string[] {
-        return this.stateStore.states().map(state => state.state);
-    }
-
     constructor() {
         effect((): void => {
             this.modalOpen.set(!!this.taskId);
         });
+    }
+
+    connectedDropLists(): string[] {
+        return this.stateStore.states().map(state => state.state);
     }
 
     public createTask(): void {

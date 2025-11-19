@@ -1,6 +1,10 @@
 <div class="form-container">
     <h2 class="form-title">
+    @if (isRegisterForm()) {
+        S'enregistrer
+    } @else {
         Connexion
+    }
     </h2>
     <div></div>
     <form class="space-y-4" (submit)="onSubmit($event)">

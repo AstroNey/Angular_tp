@@ -14,8 +14,6 @@ import {
 } from '@angular/forms/signals';
 import Role from '../../../models/enums/Role';
 import {AuthService} from '../../../services/auth/auth-service';
-import {AuthResponse} from '../../../models/httpModels/AuthResponse';
-import {Router} from '@angular/router';
 import {FormErrors} from '../../tools/forms/form-errors/form-errors';
 
 @Component({
@@ -29,7 +27,6 @@ import {FormErrors} from '../../tools/forms/form-errors/form-errors';
 })
 export class Login {
     #authService: AuthService = inject(AuthService);
-    #router: Router = inject(Router);
 
     readonly roles: Role[] = Object.values(Role);
     protected readonly Role = Role;
@@ -66,18 +63,10 @@ export class Login {
         try {
             submit(this.userForm, async (form: FieldTree<User>): Promise<void> => {
                 if (this.isRegisterForm()) {
-                    this.#authService.register(form().value()).subscribe({
-                        next: (res: AuthResponse) => {
-                            this.#router.navigate(['/tasks']);
-                        }
-                    });
+                    this.#authService.register(form().value()).subscribe();
                 }
                 else {
-                    this.#authService.login(form().value()).subscribe({
-                        next: async (res: AuthResponse) => {
-                            await this.#router.navigate(['/tasks']);
-                        }
-                    });
+                    this.#authService.login(form().value()).subscribe();
                 }
             });
             event.preventDefault();

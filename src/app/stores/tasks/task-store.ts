@@ -32,6 +32,9 @@ export const TaskStore = signalStore(
     })),
 
     withMethods((store) => ({
+        reloadStore(): void {
+            store._tasks.reload();
+        },
         initMap(): void {
             for (const state of store.stateStore.states()) {
                 const tasksForState: Task[] = store.tasks().filter((task: Task) => task.state.state === state.state);
@@ -111,10 +114,10 @@ export const TaskStore = signalStore(
         onInit(): void {
             effect((): void => {
                 const tasks: Task[] = store._tasks.value();
-                if (tasks && !store.isAlreadyInitialized()) {
+                if (tasks) {
                     patchState(store, { tasks: tasks });
                 }
-                if (store.isAlreadyInitialized() && store.isReadyToInit()) {
+                if (store.isReadyToInit()) {
                     store.initMap();
                 }
             });

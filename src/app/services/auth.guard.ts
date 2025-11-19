@@ -1,18 +1,17 @@
-import {CanActivateFn, Router} from '@angular/router';
+import {CanActivateFn, CanMatchFn, Router} from '@angular/router';
 import {inject} from '@angular/core';
 import {AuthService} from './auth/auth-service';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanMatchFn = (route, segments) => {
 
     const authService = inject(AuthService);
     const router = inject(Router);
 
     // La logique de vérification
-    if (authService.isConnected) {
+    if (authService.getConnectionState()) {
         return true;
     }
 
-    router.navigate(['/login']);
-    return false;
+    return router.parseUrl('/login')
 };
 
