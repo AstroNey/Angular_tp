@@ -9,9 +9,7 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
     const router: Router = inject(Router);
     const token: string | null = authService.getToken();
 
-    if(isProtectedRequest(req.url, token)) {
-        return EMPTY;
-    }
+
     if (!token) {
         return next(req);
     }

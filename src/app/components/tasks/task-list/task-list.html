@@ -32,7 +32,7 @@
          [cdkDropListData]="tasksInThisColumn()"
          id="{{state().state}}">
         @if (tasksInThisColumn().length > 0) {
-            @for (task of tasksInThisColumn(); track task) {
+            @for (task of tasksInThisColumn(); track task.id) {
                 <app-task-card [task]="task"
                                cdkDrag
                                [cdkDragData]="task">
