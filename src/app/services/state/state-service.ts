@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient, httpResource, HttpResourceRef} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {State} from '../../models/state/State';
 import {Observable} from 'rxjs';
 
@@ -10,17 +10,8 @@ export class StateService {
     private http: HttpClient = inject(HttpClient);
     private apiUrl: string = 'http://localhost:8080/api/states';
 
-    getStates(): HttpResourceRef<State[]> {
-        return httpResource<State[]>((): {url: string; method : string} => {
-                return {
-                    url: this.apiUrl,
-                    method: "GET"
-                };
-            }, {
-                defaultValue: []
-            }
-        );
-
+    getStates(): Observable<State[]> {
+        return this.http.get<State[]>(`${this.apiUrl}`);
     }
 
     createState(state: Partial<State>): Observable<State> {

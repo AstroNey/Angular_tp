@@ -1,32 +1,34 @@
 <app-navbar></app-navbar>
 <div class="main-container">
-    <div class="grid-container"
-         [style.grid-template-columns]="gridColumns()"
-         cdkDropList
-         cdkDropListOrientation="horizontal"
-         (cdkDropListDropped)="dropState($event)">
-        @for (state of stateStore.states(); track state.id) {
-            <div class="co-container"
-                 cdkDragBoundary=".grid-container"
-                 [cdkDragDisabled]="isModalOpen()"
-                 cdkDrag
-                 [cdkDragData]="state">
-                <div class="add-state" routerLink="/state/create"></div>
-                <div style="min-width: 100%">
-                    @defer (on viewport)
-                    {
-                        <app-task-list-component
-                            class="drag-container"
-                            [(modalOpen)]="isModalOpen"
-                            [state]="state">
-                        </app-task-list-component>
-                    } @placeholder {
-                        <div class="loading-skeleton"></div>
-                    }
+    @if (stateStore.states().length > 0) {
+        <div class="grid-container"
+             [style.grid-template-columns]="gridColumns()"
+             cdkDropList
+             cdkDropListOrientation="horizontal"
+             (cdkDropListDropped)="dropState($event)">
+            @for (state of stateStore.states(); track state.id) {
+                <div class="co-container"
+                     cdkDragBoundary=".grid-container"
+                     [cdkDragDisabled]="isModalOpen()"
+                     cdkDrag
+                     [cdkDragData]="state">
+                    <div class="add-state" routerLink="/state/create"></div>
+                    <div style="min-width: 100%">
+                        @defer (on viewport)
+                        {
+                            <app-task-list-component
+                                class="drag-container"
+                                [(modalOpen)]="isModalOpen"
+                                [state]="state">
+                            </app-task-list-component>
+                        } @placeholder {
+                            <div class="loading-skeleton"></div>
+                        }
+                    </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+    }
     <div class="button">
         <div routerLink="/state/create">
             <svg

@@ -5,17 +5,18 @@ import {TaskService} from '../../services/task/task-service';
 import {lastValueFrom} from 'rxjs/internal/lastValueFrom';
 import {State} from '../../models/state/State';
 import {StateStore} from '../states/state-store';
+import {AuthService} from '../../services/auth/auth-service';
 
 interface TaskState {
     tasks: Task[];
     tasksByState: Record<string, Task[]>;
-    error: string | null;
+    needToReload: boolean;
 }
 
 const initialState: TaskState = {
     tasks: [],
     tasksByState: {},
-    error: null
+    needToReload: false
 };
 
 export const TaskStore = signalStore(
@@ -24,6 +25,7 @@ export const TaskStore = signalStore(
 
     withProps(() => ({
         taskService: inject(TaskService),
+        authService: inject(AuthService),
         stateStore: inject(StateStore),
     })),
 
@@ -32,8 +34,10 @@ export const TaskStore = signalStore(
     })),
 
     withMethods((store) => ({
-        reloadStore(): void {
-            store._tasks.reload();
+        async loadStore() {
+            store.taskService.getTasks().subscribe(tasks => {
+                patchState(store, { tasks: tasks, needToReload: false });
+            });
         },
         initMap(): void {
             for (const state of store.stateStore.states()) {
@@ -51,11 +55,15 @@ export const TaskStore = signalStore(
             return store.tasks().find(task => task.id === id);
         },
         async createTask(task: Task): Promise<void> {
+            const state: string | undefined = store.stateStore.states().find((s: State): boolean => s.id == task.state.id)!.state;
+            const stateTasksList: Task[] = store.tasksByState()[state] || [];
+            task.order = stateTasksList.length - 1;
+            task.state.state = state;
             const response: Task = await lastValueFrom(
                 store.taskService.createTask(task)
             );
-            patchState(store, (state) => ({
-                tasks: [...state.tasks, response]
+            patchState(store, (storeState) => ({
+                tasks: [...storeState.tasks, response],
             }));
         },
         async updateTask(id: number, task: Task): Promise<void> {
@@ -106,17 +114,12 @@ export const TaskStore = signalStore(
     })),
 
     withComputed((store) => ({
-        isAlreadyInitialized: computed((): boolean => store.tasks().length != 0),
         isReadyToInit: computed((): boolean => store.stateStore.states().length != 0),
     })),
 
     withHooks(store => ({
         onInit(): void {
             effect((): void => {
-                const tasks: Task[] = store._tasks.value();
-                if (tasks) {
-                    patchState(store, { tasks: tasks });
-                }
                 if (store.isReadyToInit()) {
                     store.initMap();
                 }

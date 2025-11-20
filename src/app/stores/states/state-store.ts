@@ -1,17 +1,20 @@
-import {computed, effect, inject} from '@angular/core';
+import {computed, inject} from '@angular/core';
 import {State} from '../../models/state/State';
-import {patchState, signalStore, withComputed, withHooks, withMethods, withProps, withState} from '@ngrx/signals';
+import {patchState, signalStore, withComputed, withMethods, withProps, withState} from '@ngrx/signals';
 import {StateService} from '../../services/state/state-service';
 import {lastValueFrom} from 'rxjs/internal/lastValueFrom';
+import {AuthService} from '../../services/auth/auth-service';
 
 interface StatesState {
     states: State[];
     error: string | null;
+    needToReload: boolean;
 }
 
 const initialState: StatesState = {
     states: [],
-    error: null
+    error: null,
+    needToReload: false
 };
 
 export const StateStore = signalStore(
@@ -20,16 +23,14 @@ export const StateStore = signalStore(
 
     withProps(() => ({
         stateService: inject(StateService),
-    })),
-
-    withProps(({ stateService }) => ({
-        _states: stateService.getStates(),
+        authService: inject(AuthService),
     })),
 
     withMethods((store) => ({
-        reloadStore(): void {
-            store._states.reload();
-            console.log('States reloaded');
+        async loadStore() {
+            store.stateService.getStates().subscribe(states => {
+                patchState(store, { states: states, needToReload: false });
+            });
         },
         updateStatesOrder(newStatesOrder: State[]): void {
             patchState(store, { states: [...newStatesOrder]});
@@ -54,22 +55,10 @@ export const StateStore = signalStore(
 
     withComputed((store) => ({
         stateColumns: computed((): string => store.states().length.toString()),
-        isAlreadyInitialized: computed((): boolean => store.states().length != 0),
         patternStates: computed((): RegExp => {
             const states = store.states().map((s: State): string => s.id.toString());
             const patternString = `^(${states.join('|')})$`;
             return new RegExp(patternString);
         })
     })),
-
-    withHooks(store => ({
-        onInit(): void {
-            effect((): void => {
-                const states: State[] = store._states.value();
-                if (states) {
-                    patchState(store, { states: states });
-                }
-            });
-        }
-    }))
 );
