@@ -1,6 +1,7 @@
 import {Component, inject, linkedSignal, WritableSignal} from '@angular/core';
 import {Task} from "../../../models/task/Task";
 import {
+    customError,
     Field,
     FieldPath,
     FieldState,
@@ -10,13 +11,14 @@ import {
     minLength,
     pattern,
     required,
-    submit
+    submit, validate
 } from "@angular/forms/signals";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TaskStore} from '../../../stores/tasks/task-store';
 import {State} from '../../../models/state/State';
 import {FormErrors} from '../../tools/forms/form-errors/form-errors';
 import {StateStore} from '../../../stores/states/state-store';
+import {ValidatorFn} from '@angular/forms';
 
 @Component({
     selector: 'app-task-update',
@@ -37,6 +39,19 @@ export class TaskForm {
         return this.taskStore.getTaskById(Number(this.taskId)) ?? {id: -1, title: "", description: "", state: {id: -1, state: "A9fZ0c"} as State, order: 0};
     });
 
+    idValidator(field: FieldPath<number>) {
+        validate(field, ctx => {
+            const value: number = +ctx.value();
+            const states = this.stateStore.states();
+            const state = states.find(s => s.id === value);
+            if (state) {
+                return null;
+            }
+            const statesList = states.map(s => s.state).join(', ');
+            return customError({ message: 'State should be in one of these: ' + statesList });
+        });
+    }
+
     protected readonly taskForm: FieldTree<Task> = form(this.taskModel, (path: FieldPath<Task>) => {
         required(path.title, { message: "Title is required." });
         minLength(path.title, 3, { message: "Title must be at least 3 characters long."});
@@ -44,11 +59,12 @@ export class TaskForm {
 
         maxLength(path.description, 255, { message: "Description cannot exceed 255 characters."});
 
-        required(path.state.state, { message: "Status is required." });
-        pattern(path.state.state, this.stateStore.patternStates(), { message: "Status must be one of: " + this.stateStore.states().map(s => s.state).join(", ") });
+        required(path.state.id, { message: "Status is required." });
+
+        this.idValidator(path.state.id);
     });
 
-    protected showErrors(field: FieldState<string,  string>): boolean {
+    protected showErrors(field: FieldState<any,  string>): boolean {
         return field.touched() && field.errors().length > 0;
     }
 

@@ -36,19 +36,19 @@
                 Statut
             </label>
             <select
-                [field]="taskForm.state.state"
-                [class.form-input-error-border]="showErrors(taskForm.state.state())"
+                [field]="taskForm.state.id"
+                [class.form-input-error-border]="showErrors(taskForm.state.id())"
                 id="status"
                 class="form-input">
                 <option value="A9fZ0c" disabled selected>Sélectionner un statut</option>
                 @for (state of stateStore.states(); track state.id) {
-                    <option value="{{state.state}}"
-                            selected="{{taskForm.state.state().value() === state.state}}">
+                    <option value="{{state.id}}"
+                            selected="{{taskForm.state.id().value() === state.id}}">
                         {{state.state}}
                     </option>
                 }
             </select>
-            <app-form-errors [ref]="taskForm.state.state"></app-form-errors>
+            <app-form-errors [ref]="taskForm.state.id"></app-form-errors>
         </div>
         <div class="pt-4">
             <button

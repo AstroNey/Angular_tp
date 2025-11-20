@@ -49,9 +49,9 @@ export class StateForm {
     protected onSubmit(event: SubmitEvent): void {
         try {
             submit(this.stateForm, async (form: FieldTree<State>): Promise<void> => {
-                await this.stateStore.addState(form().value());
+                this.stateStore.addState(form().value());
                 event.preventDefault();
-                await this.route.navigate(['tasks']);
+                this.route.navigate(['tasks']);
             });
         } catch (e) {
             console.error('Form submission error:', e);

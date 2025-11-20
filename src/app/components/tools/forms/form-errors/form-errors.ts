@@ -10,7 +10,7 @@ import {FieldState, MaybeFieldTree} from '@angular/forms/signals';
 export class FormErrors {
     @Input({ required: true }) ref!: MaybeFieldTree<any, string>;
 
-    protected showErrors(field: FieldState<string,  string>): boolean {
+    protected showErrors(field: FieldState<any,  string>): boolean {
         return field.touched() && field.errors().length > 0;
     }
 }
