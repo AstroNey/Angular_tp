@@ -4,6 +4,7 @@ import {Kanban} from './kanban';
 import {beforeEach, describe, expect, it} from "vitest";
 import {StateStore} from '../../../stores/states/state-store';
 import {ActivatedRoute} from '@angular/router';
+import {TaskStore} from '../../../stores/tasks/task-store';
 
 describe('Kanban', () => {
   let component: Kanban;
@@ -13,13 +14,17 @@ describe('Kanban', () => {
     const mockStateStore = {
         stateColumns: () => 3,
         states: () => [],
-        updateStatesOrder: () => {},
+        loadStore: () => {},
     };
+    const mockTaskStore = {
+          loadStore: () => {},
+  };
     const mockActivatedRoute = {};
     await TestBed.configureTestingModule({
       imports: [Kanban],
         providers: [
             { provide: StateStore, useValue: mockStateStore },
+            { provide: TaskStore, useValue: mockTaskStore },
             { provide: ActivatedRoute, useValue: mockActivatedRoute }
         ]
     })

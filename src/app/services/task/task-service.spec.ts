@@ -1,7 +1,7 @@
 import {TestBed} from '@angular/core/testing';
 
 import {TaskService} from './task-service';
-import {beforeEach, describe, expect, it} from "vitest";
+import {afterEach, beforeEach, describe, expect, it} from "vitest";
 import {Task} from "../../models/task/Task";
 import {HttpTestingController, provideHttpClientTesting} from '@angular/common/http/testing';
 import {provideHttpClient} from '@angular/common/http';
@@ -22,103 +22,63 @@ describe('TaskService', () => {
         httpMock = TestBed.inject(HttpTestingController);
     });
 
+    afterEach(() => {
+        httpMock.verify();
+    });
+
     it('should be created', () => {
         expect(service).toBeTruthy();
     });
 
     describe('getTasks', () => {
+        const apiUrl = 'http://localhost:8080/api/tasks';
+        const mockTasks: Task[] = [
+            { id: 1, title: 'Task 1', description: 'Description 1', state: { id: 1, state: 'OPEN', color: "#FFFFFF", order: 0}, order : 0 },
+            { id: 2, title: 'Task 2', description: 'Description 2', state: { id: 2, state: 'IN_PROGRESS', color: "#FFFFFF", order: 1}, order : 1 },
+        ];
+
         it('should create an HttpResourceRef', () => {
-            const result = TestBed.runInInjectionContext(() => service.getTasks());
+            let receivedTasks: Task[] | undefined;
 
-            expect(result).toBeDefined();
-            expect(result.value).toBeDefined();
-            expect(result.status).toBeDefined();
-        });
-
-        it('should return default empty array initially', () => {
-            const result = TestBed.runInInjectionContext(() => service.getTasks());
-
-            expect(result.value()).toEqual([]);
-        });
-
-        it('should load tasks from the API', async () => {
-            const mockTasks: Task[] = [
-                { id: 1, title: 'Task 1', description: 'Description 1', state: { id: 1, state: 'OPEN', color: "#FFFFFF"}, order : 0 },
-                { id: 2, title: 'Task 2', description: 'Description 2', state: { id: 2, state: 'IN_PROGRESS', color: "#FFFFFF"}, order : 1 },
-            ];
-
-            let resourceRef: any;
-
-            TestBed.runInInjectionContext(() => {
-                resourceRef = service.getTasks();
+            service.getTasks().subscribe(tasks => {
+                receivedTasks = tasks;
             });
 
-            resourceRef.value();
-            await new Promise(resolve => setTimeout(resolve, 0));
-
-            const req = httpMock.expectOne('http://localhost:8080/api/tasks');
+            const req = httpMock.expectOne(apiUrl);
             expect(req.request.method).toBe('GET');
 
             req.flush(mockTasks);
 
-            // Wait for the response to be processed
-            await new Promise(resolve => setTimeout(resolve, 0));
-
-            expect(resourceRef.value()).toEqual(mockTasks);
+            expect(receivedTasks).toEqual(mockTasks);
         });
 
-        it('should handle HTTP errors gracefully', async () => {
-            let resourceRef: any;
+        it('should handle HTTP errors gracefully', () => {
+            let receivedError: any;
 
-            TestBed.runInInjectionContext(() => {
-                resourceRef = service.getTasks();
+            // IGNORE Cannot find name fail
+            service.getTasks().subscribe({
+                next: () => fail('Should have failed'),
+                error: (error) => receivedError = error,
             });
 
-            resourceRef.value();
-            await new Promise(resolve => setTimeout(resolve, 0));
+            const req = httpMock.expectOne(apiUrl);
+            expect(req.request.method).toBe('GET');
 
-            const req = httpMock.expectOne('http://localhost:8080/api/tasks');
-
-            // Simulate an error response
             req.flush('Error loading tasks', {
                 status: 500,
                 statusText: 'Internal Server Error'
             });
 
-            await new Promise(resolve => setTimeout(resolve, 0));
-
-            // Check error status
-            expect(resourceRef.status()).toBe('error');
-            expect(resourceRef.error()).toBeDefined();
-        });
-
-        it('should have loading status while request is pending', async () => {
-            let resourceRef: any;
-
-            TestBed.runInInjectionContext(() => {
-                resourceRef = service.getTasks();
-            });
-            resourceRef.value();
-            await new Promise(resolve => setTimeout(resolve, 0));
-
-            expect(resourceRef.status()).toBe('loading');
-            expect(resourceRef.isLoading()).toBe(true);
-
-            const req = httpMock.expectOne('http://localhost:8080/api/tasks');
-            req.flush([]);
-
-            await new Promise(resolve => setTimeout(resolve, 0));
-
-            expect(resourceRef.status()).toBe('resolved');
-            expect(resourceRef.isLoading()).toBe(false);
+            expect(receivedError).toBeDefined();
+            expect(receivedError.status).toBe(500);
         });
 
     });
 
     describe('createTask', () => {
         it('should create a new task via POST request', () => {
-            const newTask: Partial<Task> = { title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN', color: "#FFFFFF"}, order : 0 };
-            const createdTask: Task = { id: 3, title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN' , color: "#FFFFFF"}, order : 1 };
+            const newTask: Partial<Task> = { title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN', color: "#FFFFFF", order : 0}, order : 0 };
+            const createdTask: Task = { id: 3, title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN' , color: "#FFFFFF", order : 0}, order : 1 };
 
             service.createTask(newTask).subscribe(task => {
                 expect(task).toEqual(createdTask);
@@ -132,7 +92,7 @@ describe('TaskService', () => {
         });
 
         it('should handle create task error', () => {
-            const newTask: Partial<Task> = { title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN', color: "#FFFFFF"}, order : 0 };
+            const newTask: Partial<Task> = { title: 'New Task', description: 'New Description', state: { id: 1, state: 'OPEN', color: "#FFFFFF", order : 0}, order : 0 };
             let receivedError: any | null = null;
 
             service.createTask(newTask).subscribe({
@@ -163,7 +123,7 @@ describe('TaskService', () => {
     describe('updateTask', () => {
         it('should update an existing task via PUT request', () => {
             const updatedTask: Partial<Task> = { id: 1, title: 'Updated Task', description: 'Test' };
-            const responseTask: Partial<Task> = { id: 1, title: 'Updated Task', description: 'Test', state: { id: 2, state: 'IN_PROGRESS', color: "#FFFFFF"}, order : 0 };
+            const responseTask: Partial<Task> = { id: 1, title: 'Updated Task', description: 'Test', state: { id: 2, state: 'IN_PROGRESS', color: "#FFFFFF", order : 0}, order : 0 };
 
             service.updateTask(updatedTask).subscribe(task => {
                 expect(task).toEqual(responseTask);

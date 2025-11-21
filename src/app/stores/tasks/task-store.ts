@@ -27,10 +27,6 @@ export const TaskStore = signalStore(
         stateStore: inject(StateStore),
     })),
 
-    withProps(({ taskService }) => ({
-        _tasks: taskService.getTasks()
-    })),
-
     withMethods((store) => ({
         async loadStore() {
             store.taskService.getTasks().subscribe(tasks => {

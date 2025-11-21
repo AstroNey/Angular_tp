@@ -3,46 +3,38 @@ import {TestBed} from '@angular/core/testing';
 import {TaskStore} from './task-store';
 import {TaskService} from '../../services/task/task-service';
 import {Task} from "../../models/task/Task";
-import {HttpResourceRef} from '@angular/common/http';
 import {State} from '../../models/state/State';
-import {signal, WritableSignal} from '@angular/core';
-import {StateService} from '../../services/state/state-service';
 import {of} from 'rxjs';
+import {StateStore} from '../states/state-store';
 
 describe('TaskStore', () => {
     let taskServiceMock: TaskService;
-    let stateServiceMock: StateService;
+    let stateStoreMock;
     let store: InstanceType<typeof TaskStore>;
 
-    const dfMockTasks: Task[] = [{ id: 1, title: 'Task 1', description: 'Description 1', state: { id: 1, state: 'To Do', color: "#FFFFFF" }, order: 0 }];
-    const dfMockStates: State[] = [{ id: 1, state: 'To Do', color: "#FFFFFF" }];
+    const dfMockTasks: Task[] = [{ id: 1, title: 'Task 1', description: 'Description 1', state: { id: 1, state: 'To Do', color: "#FFFFFF", order: 1 }, order: 0 }];
+    const dfMockStates: State[] = [{ id: 1, state: 'To Do', color: "#FFFFFF", order: 1 }];
     let mockTasks: Task[] = structuredClone(dfMockTasks);
     let mockStates: State[] = structuredClone(dfMockStates);
 
     beforeEach(() => {
-        const mockTasksResource: HttpResourceRef<Task[]> = {
-            value: signal([] as Task[]) as WritableSignal<Task[]>,
-            isLoading: vi.fn(() => false),
-        } as any;
-        const mockStatesResource: HttpResourceRef<State[]> = {
-            value: signal([] as State[]) as WritableSignal<State[]>,
-            isLoading: vi.fn(() => false),
+        stateStoreMock = {
+            states: vi.fn(() => mockStates),
+            stateColumns: vi.fn(() => 1),
+            loadStore: vi.fn(),
         } as any;
         taskServiceMock = {
-            getTasks: vi.fn(() => mockTasksResource),
+            getTasks: vi.fn(() => of(mockTasks)),
             deleteTask: vi.fn(() => of(void 0)),
             updateTask: vi.fn(),
             createTask: vi.fn(),
             updateTasksOrder: vi.fn(() => of(void 0)),
         } as any;
-        stateServiceMock = {
-            getStates: vi.fn(() => mockStatesResource),
-        } as any;
 
         TestBed.configureTestingModule({
             providers: [
                 { provide: TaskService, useValue: taskServiceMock },
-                { provide: StateService, useValue: stateServiceMock },
+                { provide: StateStore, useValue: stateStoreMock },
                 TaskStore,
             ],
         });
@@ -59,12 +51,14 @@ describe('TaskStore', () => {
     });
 
     const load = async () => {
-        const tasksResource: HttpResourceRef<Task[]> = taskServiceMock.getTasks();
-        const statesResource: HttpResourceRef<State[]> = stateServiceMock.getStates();
-        (tasksResource.value as WritableSignal<Task[]>).set(mockTasks);
-        (statesResource.value as WritableSignal<State[]>).set(mockStates);
+        // 1. Call the store's load method, which triggers the service call
+        store.loadStore();
 
+        // 2. Wait for the asynchronous microtask queue to run (where the subscription/patchState executes)
         await new Promise(resolve => setTimeout(resolve, 0));
+
+        // 3. Manually call initMap() to populate tasksByState
+        store.initMap();
     }
 
     it('should be defined', () => {
@@ -105,7 +99,7 @@ describe('TaskStore', () => {
 
 
         it ('should update task order within the same state', async () => {
-            const task2: Task = { id: 2, title: 'Task 2', description: 'Description 2', state: { id: 1, state: 'To Do', color: "#FFFFFF" }, order: 1 };
+            const task2: Task = { id: 2, title: 'Task 2', description: 'Description 2', state: { id: 1, state: 'To Do', color: "#FFFFFF", order: 1 }, order: 1 };
             mockTasks.push(task2);
             await load();
 
@@ -115,7 +109,7 @@ describe('TaskStore', () => {
         });
 
         it ('should transfer task to a different state', async () => {
-            const stateInProgress: State = { id: 2, state: 'In Progress', color: "#FFFFFF" };
+            const stateInProgress: State = { id: 2, state: 'In Progress', color: "#FFFFFF", order: 1 };
             mockStates.push(stateInProgress);
             await load();
 
@@ -134,7 +128,7 @@ describe('TaskStore', () => {
 
         it('should update task by id', async () => {
             await load();
-            const updatedTask: Task = { id: 1, title: 'Updated Task 1', description: 'Updated Description 1', state: { id: 1, state: 'To Do', color: "#FFFFFF" }, order : 1 };
+            const updatedTask: Task = { id: 1, title: 'Updated Task 1', description: 'Updated Description 1', state: { id: 1, state: 'To Do', color: "#FFFFFF", order: 1 }, order : 1 };
             taskServiceMock.updateTask = vi.fn(() => of(updatedTask));
             await store.updateTask(1, updatedTask);
             expect(taskServiceMock.updateTask).toHaveBeenCalledWith(updatedTask);
@@ -143,7 +137,7 @@ describe('TaskStore', () => {
 
         it('should create a new task', async () => {
             await load();
-            const newTask: Task = { id: 2, title: 'New Task', description: 'New Description', state: { id: 1, state: 'To Do', color: "#FFFFFF" }, order: 1 };
+            const newTask: Task = { id: 2, title: 'New Task', description: 'New Description', state: { id: 1, state: 'To Do', color: "#FFFFFF", order: 1 }, order: 1 };
             taskServiceMock.createTask = vi.fn(() => of(newTask));
             await store.createTask(newTask);
             expect(taskServiceMock.createTask).toHaveBeenCalledWith(newTask);
