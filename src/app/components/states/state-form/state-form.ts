@@ -7,14 +7,13 @@ import {
     FieldTree,
     form,
     maxLength,
-    minLength, pattern,
+    minLength,
     required,
     submit
 } from '@angular/forms/signals';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {FormErrors} from '../../tools/forms/form-errors/form-errors';
 import {StateStore} from '../../../stores/states/state-store';
-import {Task} from '../../../models/task/Task';
 
 @Component({
   selector: 'app-state-form',
@@ -28,13 +27,16 @@ import {Task} from '../../../models/task/Task';
 export class StateForm {
 
     stateStore = inject(StateStore);
-    route: Router = inject(Router);
+    #route: ActivatedRoute = inject(ActivatedRoute);
+    router: Router = inject(Router);
+
+    readonly order: number = Number(this.#route.snapshot.paramMap.get('order'));
 
     stateModel: WritableSignal<State> = signal<State>({
         id: -1,
         state: '',
         color: '#000000',
-        order: 0
+        order: this.order ?? 0
     });
 
     stateForm: FieldTree<State> = form(this.stateModel, (path: FieldPath<State>) => {
@@ -52,7 +54,7 @@ export class StateForm {
             submit(this.stateForm, async (form: FieldTree<State>): Promise<void> => {
                 this.stateStore.addState(form().value());
                 event.preventDefault();
-                this.route.navigate(['tasks']);
+                this.router.navigate(['tasks']);
             });
         } catch (e) {
             console.error('Form submission error:', e);

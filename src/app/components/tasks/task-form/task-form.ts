@@ -9,7 +9,6 @@ import {
     form,
     maxLength,
     minLength,
-    pattern,
     required,
     submit, validate
 } from "@angular/forms/signals";
@@ -18,7 +17,6 @@ import {TaskStore} from '../../../stores/tasks/task-store';
 import {State} from '../../../models/state/State';
 import {FormErrors} from '../../tools/forms/form-errors/form-errors';
 import {StateStore} from '../../../stores/states/state-store';
-import {ValidatorFn} from '@angular/forms';
 
 @Component({
     selector: 'app-task-update',

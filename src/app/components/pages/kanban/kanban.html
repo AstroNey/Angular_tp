@@ -12,7 +12,7 @@
                      [cdkDragDisabled]="isModalOpen()"
                      cdkDrag
                      [cdkDragData]="state">
-                    <div class="add-state" routerLink="/state/create"></div>
+                    <div class="add-state" [routerLink]="['/state/create', state.order]"></div>
                     <div style="min-width: 100%">
                         @defer (on viewport)
                         {
@@ -30,7 +30,7 @@
         </div>
     }
     <div class="button">
-        <div routerLink="/state/create">
+        <div [routerLink]="['/state/create', stateStore.states().length]">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"

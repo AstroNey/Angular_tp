@@ -17,7 +17,15 @@ export const routes: Routes = [
                 ).then((m) => m.Kanban)
     },
     {
-        path: 'state/create',
+        path: 'state/create/',
+        canMatch: [authGuard],
+        loadComponent: () =>
+            import(
+                "./components/states/state-form/state-form"
+                ).then((m) => m.StateForm)
+    },
+    {
+        path: 'state/create/:order',
         canMatch: [authGuard],
         loadComponent: () =>
             import(

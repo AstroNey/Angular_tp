@@ -42,9 +42,17 @@ export const StateStore = signalStore(
             const response: State =  await lastValueFrom(
                 store.stateService.createState(state)
             );
+            store.states().forEach((s: State) => {
+                if (s.order >= state.order) {
+                    s.order += 1;
+                }
+            });
             patchState(store, (actState) => ({
                 states: [...actState.states, response]
             }));
+            store.states().sort((a: State, b: State) => a.order - b.order);
+            this.updateStatesOrder(store.states());
+
         },
         async deleteStateById(id: number): Promise<void> {
             await lastValueFrom(

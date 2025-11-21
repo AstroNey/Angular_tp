@@ -6,7 +6,6 @@ import {RouterLink} from '@angular/router';
 import {Navbar} from '../../tools/navbar/navbar';
 import {StateStore} from '../../../stores/states/state-store';
 import {TaskStore} from '../../../stores/tasks/task-store';
-import {AuthService} from '../../../services/auth/auth-service';
 
 @Component({
   selector: 'app-kanban',
@@ -27,7 +26,6 @@ export class Kanban implements OnInit {
 
     stateStore = inject(StateStore);
     taskStore = inject(TaskStore);
-    authService = inject(AuthService);
     readonly gridColumns: Signal<string> = linkedSignal(() => `repeat(${this.stateStore.stateColumns()}, minmax(0, 270px))`);
 
     ngOnInit(): void {
