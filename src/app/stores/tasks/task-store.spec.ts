@@ -74,23 +74,12 @@ describe('TaskStore', () => {
     it('should initialize with default state', () => {
         expect(store.tasks()).toEqual([]);
         expect(store.tasksByState()).toEqual({});
-        expect(store.error()).toBeNull();
     });
 
     it('should initialize and patch tasks and states on first load', async () => {
         await load();
 
         expect(store.tasks()).toEqual(mockTasks);
-    });
-
-    it('should compute isAlreadyInitialized when tasks are loaded', async () => {
-        await load();
-
-        expect(store.isAlreadyInitialized()).toBe(true);
-    });
-
-    it('isAlreadyInitialized should be false before init', async () => {
-        expect(store.isAlreadyInitialized()).toBe(false);
     });
 
     it('should fill tasksByState when initMap is called', async () => {

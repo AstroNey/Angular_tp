@@ -32,11 +32,4 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
     );
 }
 
-function isProtectedRequest(url: string, token: string | null): boolean {
-    const urlSegments = url.split('/');
-    const isStatesRequest = urlSegments.includes('states');
-    const isTasksRequest = urlSegments.includes('tasks');
-
-    return (isStatesRequest || isTasksRequest) && !token;
-}
 

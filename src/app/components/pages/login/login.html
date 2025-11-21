@@ -61,8 +61,14 @@
 
         @if (!isRegisterForm()) {
             <div class="register-container">
-                <span class="register-text" (click)="changeFormStateToRegister()">
+                <span class="register-text" (click)="changeFormState()">
                     Pas encore de compte ? <b>Inscrivez-vous</b>
+                </span>
+            </div>
+        }@else {
+            <div class="register-container">
+                <span class="register-text" (click)="changeFormState()">
+                    Déjà un compte ? <b>Connectez-vous</b>
                 </span>
             </div>
         }

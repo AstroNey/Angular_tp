@@ -2,6 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {State} from '../../models/state/State';
 import {Observable} from 'rxjs';
+import {Task} from '../../models/task/Task';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,10 @@ export class StateService {
 
     createState(state: Partial<State>): Observable<State> {
         return this.http.post<State>(`${this.apiUrl}`, state);
+    }
+
+    updateStatesOrder(states: Partial<State>[]): Observable<void> {
+        return this.http.put<void>(`${this.apiUrl}/orders`, states);
     }
 
     deleteState(stateId: number): Observable<void> {

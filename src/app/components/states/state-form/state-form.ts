@@ -33,7 +33,8 @@ export class StateForm {
     stateModel: WritableSignal<State> = signal<State>({
         id: -1,
         state: '',
-        color: '#000000'
+        color: '#000000',
+        order: 0
     });
 
     stateForm: FieldTree<State> = form(this.stateModel, (path: FieldPath<State>) => {

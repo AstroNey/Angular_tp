@@ -8,13 +8,11 @@ import {AuthService} from '../../services/auth/auth-service';
 interface StatesState {
     states: State[];
     error: string | null;
-    needToReload: boolean;
 }
 
 const initialState: StatesState = {
     states: [],
-    error: null,
-    needToReload: false
+    error: null
 };
 
 export const StateStore = signalStore(
@@ -29,10 +27,15 @@ export const StateStore = signalStore(
     withMethods((store) => ({
         async loadStore() {
             store.stateService.getStates().subscribe(states => {
-                patchState(store, { states: states, needToReload: false });
+                const orderedStates: State[] = states.sort((a: State, b: State) => a.order - b.order);
+                patchState(store, { states: orderedStates });
             });
         },
-        updateStatesOrder(newStatesOrder: State[]): void {
+        async updateStatesOrder(newStatesOrder: State[]): Promise<void> {
+            newStatesOrder.map((state: State): number => state.order = newStatesOrder.findIndex((s: State): boolean => s.id === state.id));
+            await lastValueFrom(
+                store.stateService.updateStatesOrder(newStatesOrder)
+            );
             patchState(store, { states: [...newStatesOrder]});
         },
         async addState(state: State): Promise<void> {

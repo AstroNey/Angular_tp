@@ -75,7 +75,7 @@ export class Login {
         }
     }
 
-    protected changeFormStateToRegister(): void {
+    protected changeFormState(): void {
         this.isRegisterForm.set(!this.isRegisterForm());
         this.userForm().reset();
     }

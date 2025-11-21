@@ -10,13 +10,11 @@ import {AuthService} from '../../services/auth/auth-service';
 interface TaskState {
     tasks: Task[];
     tasksByState: Record<string, Task[]>;
-    needToReload: boolean;
 }
 
 const initialState: TaskState = {
     tasks: [],
-    tasksByState: {},
-    needToReload: false
+    tasksByState: {}
 };
 
 export const TaskStore = signalStore(
@@ -36,7 +34,7 @@ export const TaskStore = signalStore(
     withMethods((store) => ({
         async loadStore() {
             store.taskService.getTasks().subscribe(tasks => {
-                patchState(store, { tasks: tasks, needToReload: false });
+                patchState(store, { tasks: tasks });
             });
         },
         initMap(): void {
