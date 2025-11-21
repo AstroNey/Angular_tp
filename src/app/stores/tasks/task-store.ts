@@ -6,6 +6,7 @@ import {lastValueFrom} from 'rxjs/internal/lastValueFrom';
 import {State} from '../../models/state/State';
 import {StateStore} from '../states/state-store';
 import {AuthService} from '../../services/auth/auth-service';
+import {UtilsService} from '../../services/utils/utils-service';
 
 interface TaskState {
     tasks: Task[];
@@ -24,6 +25,7 @@ export const TaskStore = signalStore(
     withProps(() => ({
         taskService: inject(TaskService),
         authService: inject(AuthService),
+        utilsService: inject(UtilsService),
         stateStore: inject(StateStore),
     })),
 
@@ -56,6 +58,7 @@ export const TaskStore = signalStore(
             const response: Task = await lastValueFrom(
                 store.taskService.createTask(task)
             );
+            store.utilsService.handleSucces("State created successfully")
             patchState(store, (storeState) => ({
                 tasks: [...storeState.tasks, response],
             }));
@@ -64,6 +67,8 @@ export const TaskStore = signalStore(
             const response: Task = await lastValueFrom(
                 store.taskService.updateTask(task)
             );
+            //SI res n'est pas une erreur alors
+            store.utilsService.handleSucces("State updated successfully")
             patchState(store, (state) => ({
                 tasks: state.tasks.map((t: Task) => t.id === id ? response : t)
             }));
@@ -71,7 +76,8 @@ export const TaskStore = signalStore(
         async deleteTaskById(id: number): Promise<void> {
             await lastValueFrom(
                 store.taskService.deleteTask(id)
-            )
+            );
+            store.utilsService.handleSucces("Task deleted successfully");
             patchState(store, (state) =>  ({ tasks: state.tasks.filter((t: Task): boolean => t.id !== id) }) );
         },
         async updateTaskOrder(params: { taskId: number; newIndex: number; newStatus: string }): Promise<void> {

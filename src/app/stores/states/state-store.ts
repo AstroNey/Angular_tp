@@ -4,6 +4,7 @@ import {patchState, signalStore, withComputed, withMethods, withProps, withState
 import {StateService} from '../../services/state/state-service';
 import {lastValueFrom} from 'rxjs/internal/lastValueFrom';
 import {AuthService} from '../../services/auth/auth-service';
+import {UtilsService} from '../../services/utils/utils-service';
 
 interface StatesState {
     states: State[];
@@ -22,6 +23,7 @@ export const StateStore = signalStore(
     withProps(() => ({
         stateService: inject(StateService),
         authService: inject(AuthService),
+        utilsService: inject(UtilsService),
     })),
 
     withMethods((store) => ({
@@ -52,7 +54,7 @@ export const StateStore = signalStore(
             }));
             store.states().sort((a: State, b: State) => a.order - b.order);
             this.updateStatesOrder(store.states());
-
+            store.utilsService.handleSucces("State created successfully.");
         },
         async deleteStateById(id: number): Promise<void> {
             await lastValueFrom(
@@ -61,6 +63,7 @@ export const StateStore = signalStore(
             patchState(store, (actState) => ({
                 states: actState.states.filter((s: State): boolean => s.id !== id)
             }));
+            store.utilsService.handleSucces("State deleted successfully.");
         }
     })),
 

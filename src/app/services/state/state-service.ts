@@ -2,7 +2,6 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {State} from '../../models/state/State';
 import {Observable} from 'rxjs';
-import {Task} from '../../models/task/Task';
 
 @Injectable({
   providedIn: 'root'

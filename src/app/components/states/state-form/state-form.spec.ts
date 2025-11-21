@@ -4,7 +4,8 @@ import {StateForm} from './state-form';
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {signal} from '@angular/core';
 import {StateStore} from '../../../stores/states/state-store';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MessageService} from 'primeng/api';
 
 describe('StateForm', () => {
   let component: StateForm;
@@ -20,12 +21,28 @@ describe('StateForm', () => {
       routerSpy = {
           navigate: vi.fn(),
       };
+      const mockActivatedRoute = {
+          snapshot: {
+              paramMap: {
+                  get: (key: string) => {
+                      if (key === 'order') return '1';
+                      return null;
+                  }
+              }
+          }
+      };
+      const messageServiceMock = {
+          add: () => {},
+          clear: () => {},
+      } as unknown as MessageService;
 
     await TestBed.configureTestingModule({
       imports: [StateForm],
         providers: [
             { provide: StateStore, useValue: stateStoreMock },
+            { provide: MessageService, useValue: messageServiceMock },
             { provide: Router, useValue: routerSpy },
+            { provide: ActivatedRoute, useValue: mockActivatedRoute }
         ]
     })
     .compileComponents();

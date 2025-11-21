@@ -6,10 +6,12 @@ import {Task} from "../../models/task/Task";
 import {State} from '../../models/state/State';
 import {of} from 'rxjs';
 import {StateStore} from '../states/state-store';
+import {MessageService} from 'primeng/api';
 
 describe('TaskStore', () => {
     let taskServiceMock: TaskService;
     let stateStoreMock;
+    let messageServiceMock: MessageService;
     let store: InstanceType<typeof TaskStore>;
 
     const dfMockTasks: Task[] = [{ id: 1, title: 'Task 1', description: 'Description 1', state: { id: 1, state: 'To Do', color: "#FFFFFF", order: 1 }, order: 0 }];
@@ -30,11 +32,16 @@ describe('TaskStore', () => {
             createTask: vi.fn(),
             updateTasksOrder: vi.fn(() => of(void 0)),
         } as any;
+        messageServiceMock = {
+            add: vi.fn(),
+            clear: vi.fn(),
+        } as any;
 
         TestBed.configureTestingModule({
             providers: [
                 { provide: TaskService, useValue: taskServiceMock },
                 { provide: StateStore, useValue: stateStoreMock },
+                { provide: MessageService, useValue: messageServiceMock },
                 TaskStore,
             ],
         });

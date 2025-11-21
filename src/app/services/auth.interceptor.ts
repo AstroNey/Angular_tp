@@ -1,17 +1,38 @@
 import {HttpHandlerFn, HttpRequest} from '@angular/common/http';
 import {AuthService} from './auth/auth-service';
 import {inject} from '@angular/core';
-import {catchError, EMPTY, throwError} from 'rxjs';
+import {catchError, of} from 'rxjs';
 import {Router} from '@angular/router';
+import {UtilsService} from './utils/utils-service';
 
 export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) {
     const authService: AuthService = inject(AuthService);
+    const utilsService: UtilsService = inject(UtilsService);
     const router: Router = inject(Router);
     const token: string | null = authService.getToken();
 
 
     if (!token) {
-        return next(req);
+        return next(req).pipe(
+            catchError(error => {
+                if (error.status === 401) {
+                    authService.logout();
+                    router.navigate(['/login']);
+                    utilsService.handleError(error);
+                }
+                if (error.status === 403) {
+                    router.navigate(['/login']);
+                    error.text = 'Nom d\'utilisateur ou mot de passe incorrect';
+                    utilsService.handleError(error);
+                }
+                if (error.status === 400) {
+                    router.navigate(['/login']);
+                    error.text = 'Nom d\'utilisateur existe deja';
+                    utilsService.handleError(error);
+                }
+                return of(error) ;
+            })
+        );
     }
 
     const authReq = req.clone({
@@ -20,14 +41,17 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn) 
 
     return next(authReq).pipe(
         catchError(error => {
+            console.warn(error);
             if (error.status === 401) {
-                console.error('Erreur 401: Token expiré ou non valide. Déconnexion...');
                 authService.logout();
                 router.navigate(['/login']);
-                return throwError(() => error);
+                utilsService.handleError(error);
             }
-
-            return throwError(() => error);
+            if (error.status === 403) {
+                router.navigate(['/login']);
+                utilsService.handleError(error);
+            }
+            return of(error) ;
         })
     );
 }
