@@ -1,0 +1,23 @@
+<div class="modal-overlay">
+    <div class="kanban-modal modal-small" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+
+        <div class="modal-header kanban-header-accent-red">
+            <h3 id="confirmTitle">Confirmation de Suppression</h3>
+        </div>
+
+        <div class="modal-content text-center">
+            <p>
+                Êtes-vous sûr de vouloir supprimer :
+                <br>
+                <span class="task-to-delete">{{ itemType }}</span>
+            </p>
+        </div>
+
+        <div class="modal-actions">
+            <button type="button" class="btn-secondary" (click)="onCancel()">Annuler</button>
+
+            <button type="button" class="btn-danger" (click)="onConfirm()">Supprimer</button>
+        </div>
+
+    </div>
+</div>
