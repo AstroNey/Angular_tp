@@ -36,3 +36,13 @@
         </div>
     </div>
 }
+@defer {
+    @if(showDeleteModal()) {
+        <app-delete-modal
+            [itemType]="this.task().title"
+            [itemId]="this.task().id"
+            (confirm)="confirmDeleteTask()"
+            (cancel)="cancelDeleteTask()">
+        </app-delete-modal>
+    }
+}

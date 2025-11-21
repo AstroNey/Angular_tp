@@ -6,7 +6,7 @@ import {
     InputSignal,
     linkedSignal,
     model,
-    ModelSignal, OnInit,
+    ModelSignal, OnInit, signal,
     WritableSignal
 } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -17,6 +17,7 @@ import {Task} from '../../../models/task/Task';
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
 import {State} from '../../../models/state/State';
 import {StateStore} from '../../../stores/states/state-store';
+import {DeleteModal} from '../../tools/delete-modal/delete-modal';
 
 @Component({
     selector: 'app-task-list-component',
@@ -25,7 +26,8 @@ import {StateStore} from '../../../stores/states/state-store';
         TaskCard,
         TaskDetails,
         CdkDropList,
-        CdkDrag
+        CdkDrag,
+        DeleteModal
     ],
     templateUrl: './task-list.html',
     styleUrl: './task-list.css',
@@ -45,10 +47,21 @@ export class TaskList {
         return this.taskStore.tasksByState()[state] ?? [];
     });
 
+    showDeleteModal = signal<boolean>(false);
+
     constructor() {
         effect((): void => {
             this.modalOpen.set(!!this.taskId);
         });
+    }
+
+    confirmDeleteState() {
+        this.showDeleteModal.set(false);
+        this.stateStore.deleteStateById(this.state().id);
+    }
+
+    cancelDeleteState() {
+        this.showDeleteModal.set(false);
     }
 
     connectedDropLists(): string[] {
@@ -61,7 +74,7 @@ export class TaskList {
 
     public deleteState(event: Event): void {
         event.stopPropagation();
-        this.stateStore.deleteStateById(this.state().id);
+        this.showDeleteModal.set(true);
     }
 
     dropTask(event: CdkDragDrop<Task[], Task[], any>): void {

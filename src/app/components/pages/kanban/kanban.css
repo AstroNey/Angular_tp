@@ -3,7 +3,8 @@
     align-items: flex-start;
     padding: 1.5rem;
     background-color: var(--background-main-color);
-    min-height: 100vh;
+    min-height: 850px;
+    overflow: hidden;
     gap: 20px;
 }
 

@@ -23,28 +23,6 @@
             <app-form-errors [ref]="userForm.username"></app-form-errors>
         </div>
 
-        @if (isRegisterForm()) {
-            <div>
-                <label for="role" class="form-label">
-                    Rôle
-                </label>
-                <select
-                    id="role"
-                    [field]="userForm.role"
-                    class="form-input"
-                    [class.form-input-error-border]="showErrors(userForm.role())">
-                    @for(role of roles; track role) {
-                        @if (role === Role.UNKNOWN) {
-                            <option [value]="role" disabled>Sélectionner un rôle</option>
-                        } @else {
-                            <option [value]="role">{{ role }}</option>
-                        }
-                    }
-                </select>
-                <app-form-errors [ref]="userForm.role"></app-form-errors>
-            </div>
-        }
-
         <div>
             <label for="password" class="form-label">
                 Mot de Passe

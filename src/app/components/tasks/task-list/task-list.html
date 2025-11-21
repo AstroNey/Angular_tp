@@ -50,6 +50,16 @@
             An error occurred while loading task details.
         </div>
     }
+    @defer {
+        @if(showDeleteModal()) {
+            <app-delete-modal
+                [itemType]="this.state().state"
+                [itemId]="this.state().id"
+                (confirm)="confirmDeleteState()"
+                (cancel)="cancelDeleteState()">
+            </app-delete-modal>
+        }
+    }
 </div>
 
 

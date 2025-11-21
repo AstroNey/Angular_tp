@@ -61,8 +61,7 @@ export class AuthService {
             'http://localhost:8080/api/auth/register',
             {
                 username: user.username,
-                password: user.password,
-                role: user.role
+                password: user.password
             })
             .pipe(
                 tap((res: AuthResponse) => {

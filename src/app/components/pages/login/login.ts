@@ -8,11 +8,9 @@ import {
     form,
     maxLength,
     minLength,
-    pattern,
     required,
     submit
 } from '@angular/forms/signals';
-import Role from '../../../models/enums/Role';
 import {AuthService} from '../../../services/auth/auth-service';
 import {FormErrors} from '../../tools/forms/form-errors/form-errors';
 
@@ -28,16 +26,12 @@ import {FormErrors} from '../../tools/forms/form-errors/form-errors';
 export class Login {
     #authService: AuthService = inject(AuthService);
 
-    readonly roles: Role[] = Object.values(Role);
-    protected readonly Role = Role;
-
     protected isRegisterForm: WritableSignal<boolean> = signal<boolean>(false);
 
     userModel: WritableSignal<User> = signal<User>({
         id: 0,
         username: '',
         password: '',
-        role: Role.UNKNOWN,
     });
 
     userForm: FieldTree<User> = form(this.userModel, (path: FieldPath<User>): void => {
@@ -48,11 +42,6 @@ export class Login {
         required(path.password, { message: "Password is required." });
         minLength(path.password, 6, { message: "Password must be at least 6 characters long."});
         maxLength(path.password, 50, { message: "Password cannot exceed 50 characters."});
-
-        if (this.isRegisterForm()) {
-            required(path.role, { message: "Role is required." });
-            pattern(path.role, /^(ADMIN|USER)$/, { message: "Role must be either ADMIN or USER." });
-        }
     });
 
     protected showErrors(field: FieldState<string,  string>): boolean {
